@@ -1,0 +1,123 @@
+{% block styles %}
+<style>
+    .matrice table, .matrice tr, .matrice td {
+        border: 2px solid black;
+        border-collapse: collapse;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .matrice td {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+Social Value Orientation - Decisions
+{% endblock %}
+
+{% block scripts %}
+<script>
+    function fill_auto() {
+        document.querySelectorAll("table.matrice").forEach(table => {
+            let table_cells = Array.from(table.rows[0].cells).slice(1);
+            let random_selection = Math.floor(Math.random() * table_cells.length);
+            select_cell(table_cells[random_selection]);
+        });
+        setTimeout(function () {
+            document.querySelector("form").submit();
+        }, 2000);
+    }
+
+    function select_cell(cell) {
+        let [m, matrice, ligne, cellule] = cell.id.split("_");
+        Array.from(document.querySelectorAll(`#matrice_${matrice} td`)).forEach((cell) => {
+            cell.classList.remove("bg-info");
+        });
+        document.querySelector(`#m_${matrice}_0_${cellule}`).classList.add("bg-info");
+        document.querySelector(`#m_${matrice}_1_${cellule}`).classList.add("bg-info");
+
+        let value_self = js_vars.matrices[matrice][cellule][0];
+        let value_other = js_vars.matrices[matrice][cellule][1];
+
+        document.querySelector(`input[name=svo_choice_${parseInt(matrice) + 1}_self]`).value = value_self;
+        document.querySelector(`input[name=svo_choice_${parseInt(matrice) + 1}_other]`).value = value_other;
+
+        for (let i = 1; i < js_vars.matrices.length + 1; i++) {
+            if (document.querySelector(`input[name=svo_choice_${i}_self]`).value === "")
+                return false;
+        }
+        document.querySelector(".otree-btn-next").disabled = false;
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelector(".otree-btn-next").disabled = true;
+        document.querySelectorAll("table.matrice").forEach((table, table_index) => {
+            Array.from(table.rows).forEach((row, row_index) => {
+                Array.from(row.cells).forEach((cell, cell_index) => {
+                    cell.id = `m_${table_index}_${row_index}_${cell_index - 1}`;
+                });
+            });
+        });
+        if (js_vars.fill_auto)
+            fill_auto();
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div class="card bg-light text-justify mb-3">
+    <div class="card-body">
+        <p>
+            Vous faites partie d'une paire formée aléatoirement par le programme informatique. Vous ne pouvez pas
+            identifier l'autre joueur de votre paire, et il ne peut pas vous identifier.
+        </p>
+        <p>
+            Pour chacun des {{ C.matrices|length }} tableaux ci-dessous, vous devez choisir une répartition d'argent
+            entre vous et l'autre joueur. Les montants sont exprimés en ECU (monnaie expérimentale).
+            Le taux de conversion est 1 ECU = {{ C.conversion_rate|c }}.
+        </p>
+        <p>
+            La ligne du haut indique votre montant, la ligne du bas celui de l'autre joueur.
+            Cliquez sur une colonne pour faire votre choix. Vous devez choisir dans chaque tableau pour continuer.
+        </p>
+        <p>
+            À la fin, un des {{ C.matrices|length }} tableaux sera sélectionné au hasard. Puis, le programme choisira
+            aléatoirement si votre choix ou celui de l'autre joueur s'appliquera.
+        </p>
+    </div>
+</div>
+
+{% for matrice in C.matrices %}
+<div class="card mb-3">
+    <div class="card-header">
+        <h5 class="mb-3">Tableau {{ forloop.counter }}</h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered mb-3 matrice" id="matrice_{{ forloop.counter0 }}">
+            <tr>
+                <th>Pour vous</th>
+                {% for partage in matrice %}
+                <td onclick="select_cell(this);">{{ partage.0 }}</td>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>Pour l'autre</th>
+                {% for partage in matrice %}
+                <td onclick="select_cell(this);">{{ partage.1 }}</td>
+                {% endfor %}
+            </tr>
+        </table>
+        <input type="hidden" name="svo_choice_{{ forloop.counter }}_self" value="">
+        <input type="hidden" name="svo_choice_{{ forloop.counter }}_other" value="">
+    </div>
+</div>
+{% endfor %}
+
+<div class="text-center">
+    <button type="submit" class="btn btn-primary otree-btn-next">Continuer</button>
+</div>
+
+{% endblock %}

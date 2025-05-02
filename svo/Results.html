@@ -1,0 +1,29 @@
+{{ block title }}
+Social Value Orientation - Résultat
+{{ endblock }}
+
+{{ block content }}
+<div class="card bg-light text-justify mb-3">
+    <div class="card-body">
+        <p>
+          {{ participant.vars.svo.txt_final }}
+        </p>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <form method="post">
+        <button id="next-button" type="submit" class="btn btn-primary" >Suivant</button>
+    </form>
+</div>
+{{ endblock }}
+
+{{ block scripts }}
+<script src="{{ static 'fill_auto.js' }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if (js_vars.fill_auto)
+            fill_auto();
+    });
+</script>
+{{ endblock }}
