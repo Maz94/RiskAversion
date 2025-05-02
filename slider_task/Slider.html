@@ -1,0 +1,73 @@
+{{ block styles }}
+<style>
+    input[type=range] {
+        width: 75%;
+    }
+</style>
+{{ endblock }}
+
+{{ block content }}
+
+<div class="text-right mb-3">
+    <button type="button" class="btn btn-secondary" data-target="#modal_content" data-toggle="modal">Instructions
+    </button>
+</div>
+
+<h3>Placez le curseur sur la valeur <span id="target-number" class="text-info"></span></h3>
+
+<p>Nombre de sliders validés : <span id="validated_sliders" class="text-success fw-bold fs-5">0</span></p>
+
+<div class="text-center">
+    <div>
+        <input type="range" min="0" max="100" step="1" value="0" id="slider_range" class="slider"
+               oninput="slider_range_output.value=value;">
+    </div>
+    <output for="slider_range" id="slider_range_output" class="fs-5">0</output>
+</div>
+<button id="validate-btn" type="button" class="btn btn-secondary mb-2">Valider</button>
+
+<p id="feedback" class="form-control-errors"></p>
+
+{{ include_sibling "InstructionsModal.html" }}
+
+<input type="hidden" name="num_successful_sliders" id="num_successful_sliders" value="0">
+
+{{ endblock }}
+
+{{ block scripts }}
+<script>
+    let countCorrect = 0;
+    let targetNumber = Math.floor(Math.random() * 101); // Génère une valeur cible entre 0 et 100
+    document.getElementById("target-number").innerText = targetNumber;
+
+    document.getElementById("validate-btn").addEventListener("click", function () {
+        let userValue = parseInt(document.getElementById("slider_range").value);
+        let feedback = document.getElementById("feedback");
+
+        if (userValue === targetNumber) {
+            countCorrect++;
+            document.getElementById("num_successful_sliders").value = countCorrect;
+            document.getElementById("validated_sliders").innerText = countCorrect;
+            feedback.innerText = "";
+
+            // Générer une nouvelle valeur cible
+            targetNumber = Math.floor(Math.random() * 101);
+            document.getElementById("target-number").innerText = targetNumber;
+
+            // Réinitialiser le curseur
+            document.getElementById("slider_range").value = 0;
+            document.getElementById("slider_range_output").value = 0;
+        } else {
+            feedback.innerText = "Mauvaise réponse, essayez encore.";
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById("slider_range").value = 0; // Réinitialiser le curseur au chargement
+        if (js_vars.fill_auto)
+            fill_auto();
+
+    });
+
+</script>
+{{ endblock }}

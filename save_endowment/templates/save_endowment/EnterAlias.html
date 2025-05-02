@@ -1,0 +1,39 @@
+{% extends "global/Page.html" %}
+
+{% block title %}
+    <h1 class="text-center">{% trans "Choisissez votre alias" %}</h1>
+{% endblock %}
+
+{% block content %}
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+        <p class="text-center">
+            Vous pouvez entrer un alias personnalisé ou en générer un automatiquement.
+        </p>
+  <p class="text-center">
+        <form method="post">
+            <div class="form-group">
+                {{ form.alias_code }}
+            </div>
+</p>
+<p class="text-center">
+        </p>
+            <p class="text-center">
+                <button type="button" class="btn btn-secondary" onclick="generateAlias()">Générer un alias</button>
+            </p>
+
+
+        </form>
+    </div>
+</div>
+<p class="text-center">
+                <button id="submit-button" type="submit" class="btn btn-primary">Confirmer</button>
+            </p>
+<script>
+    function generateAlias() {
+        document.getElementById("id_alias_code").value = "{{ random_alias }}";
+    }
+</script>
+
+{% endblock %}

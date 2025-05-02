@@ -1,0 +1,25 @@
+{% extends "global/Page.html" %}
+
+{% block title %}
+    <h1 class="text-center">{% trans "Vérification de votre numéro" %}</h1>
+{% endblock %}
+
+{% block content %}
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+        <p class="text-center">Veuillez entrer les 4 derniers chiffres de votre numéro de téléphone.</p>
+
+        <form method="post">
+            <div class="form-group">
+                {{ form.phone_last_4_digits }}
+            </div>
+
+
+        </form>
+    </div>
+</div>
+<p class="text-center mt-3">
+                <button id="submit-button" type="submit" class="btn btn-primary">Confirmer</button>
+            </p>
+{% endblock %}

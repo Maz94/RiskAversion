@@ -1,0 +1,23 @@
+{% extends "global/Page.html" %}
+
+{% block content %}
+    <div style="text-align: center; margin-bottom: 20px;">
+        <h1 style="font-size: 3rem; font-weight: bold; color: #333;">Votre Alias :</h1>
+        <h2 style="font-size: 4rem; font-weight: bold; color: #007bff; margin: 20px 0;">{{ alias_code }}</h2>
+        <p style="font-style: italic; color: #666;">Conservez bien cet alias, vous en aurez besoin pour la prochaine session.</p>
+    </div>
+
+    <div style="max-width: 700px; margin: auto; text-align: justify; line-height: 1.6;">
+        <p>Lors de cette première session, vous avez gagné : <strong>{{ total_payoff }}€</strong>. </p>
+        <p>À ce montant s'ajoutent vos frais de participation d'un montant de <strong>5€</strong>.</p>
+
+        <p>Comme expliqué au début de cette expérience, vous vous êtes engagé(e) à vous présenter à la prochaine session muni(e)
+        du montant que vous avez gagné, <strong>mais sans les frais de participation</strong>.</p>
+
+        <p><strong>Veuillez donc apporter {{ total_payoff }}€ lors de la prochaine session.</strong></p>
+
+        <p>Nous vous recommandons de <strong>prendre une photo de votre alias</strong> afin de ne pas l’oublier.</p>
+
+        <p style="text-align: center; font-weight: bold; font-size: 1.2rem;">Merci de votre participation et à bientôt !</p>
+    </div>
+{% endblock %}

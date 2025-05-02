@@ -1,0 +1,18 @@
+<table class="table">
+    <thead>
+    <tr>
+        <th>Code</th>
+        <th>Label</th>
+        <th>Nb. Succès</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{ for p in players_infos }}
+    <tr class="{{ if p.nb_success < C.REQUIRED_SUCCESS }} bg-danger {{ endif }}">
+        <td>{{ p.code }}</td>
+        <td>{{ p.label }}</td>
+        <td>{{ p.nb_success }}</td>
+    </tr>
+    {{ endfor }}
+    </tbody>
+</table>
