@@ -1,0 +1,27 @@
+{% extends "global/Page.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<h1 style="text-align: center;">Instructions</h1>
+
+<br>
+
+<p>Bienvenue dans ce jeu de recherche de mots ! Votre objectif est de trouver le plus de mots possibles dans une grille de lettres.</p>
+
+<h4> Règles du jeu :</h4>
+<ul>
+    <li>Les mots peuvent être lus <strong>de gauche à droite</strong>, <strong>de droite à gauche</strong>, <strong>de haut en bas</strong>, <strong>de bas en haut</strong> et en <strong>diagonale</strong>.</li>
+    <li>Ils doivent contenir au minimum <strong>3 lettres</strong>.</li>
+    <li>Vous gagnez <strong>0,50 €</strong> pour chaque mot trouvé.</li>
+    <li>Si vous trouvez plus de mots que votre adversaire, vous gagnez un <strong>bonus de 2,00 €</strong>.</li>
+</ul>
+
+<p>Appuyez sur <strong>« Commencer »</strong> pour commencer !</p>
+  <div style="text-align: center; margin-top: 30px;">
+        <button class="btn btn-primary" type="submit">Commencer</button>
+    </div>
+</div>
+
+{% endblock %}

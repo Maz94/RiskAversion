@@ -1,0 +1,267 @@
+{% extends "global/Page.html" %}
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+<div id="popup-toast" class="toast"></div>
+
+<style>
+
+
+.mon-timer {
+  position: fixed;
+  top: 15px;
+  right: 20px;
+  font-size: 14px;
+  background-color: #f0f0f0;
+  padding: 6px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #333;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+
+  .cell {
+    width: 15px;
+    height: 15px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    font-size: 18px;
+    transition: background-color 0.4s ease;
+  }
+
+  .highlight {
+    background-color: #8ef58e !important;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4caf50;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 16px;
+    display: none;
+    z-index: 9999;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    animation: fade-in-out 2s ease forwards;
+  }
+
+  @keyframes fade-in-out {
+    0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+  }
+  div.alert.alert-warning {
+    display: none !important;
+}
+
+</style>
+
+
+<h1 style="text-align: center;">Grille de mots</h1>
+
+<div id="popup-toast" class="toast"></div>
+<div id="custom-timer" class="mon-timer">⏳ Temps restant : <span id="time-left">...</span></div>
+<br>
+<br>
+<ul>
+<li>Les mots peuvent apparaître dans toutes les directions :
+   de gauche à droite, de droite à gauche, de haut en bas, de bas en haut,
+   ainsi qu’en diagonale (dans toutes les orientations).</li>
+</ul>
+
+
+<h5 class="mt-4">✅ Mots trouvés</h5>
+<ul id="found-words-list"></ul>
+
+<h5>🏆 Scores</h5>
+<table class="table table-striped">
+  <tbody id="scores-tbody"></tbody>
+</table>
+
+<table class="table table-bordered word-board">
+  {% for row in board %}
+    {% with row_index=forloop.counter0 %}
+    <tr>
+      {% for char in row %}
+        <td class="cell" id="cell-{{ row_index }}-{{ forloop.counter0 }}">{{ char }}</td>
+      {% endfor %}
+    </tr>
+    {% endwith %}
+  {% endfor %}
+</table>
+
+
+<div class="text-center mt-4">
+    <div id="news" class="mt-2"></div>
+
+    <form method="post">
+        <input id="word" required minlength="3" autofocus>
+        <button type="button" class="btn btn-primary" onclick="sendWord()">Valider</button>
+    </form>
+</div>
+ <!-- <li><strong>Mots insérés :</strong> {{ inserted_words }}</li> -->
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const timeDisplay = document.getElementById("time-left");
+
+    function updateTimer() {
+        const otreeTimer = document.querySelector(".otree-timer span");
+        if (otreeTimer && timeDisplay) {
+            timeDisplay.textContent = otreeTimer.textContent;
+        }
+    }
+
+    // Lance tout de suite
+    updateTimer();
+
+    // Mets à jour toutes les 500ms
+    setInterval(updateTimer, 500);
+});
+
+
+  const foundWordsSet = new Set();
+
+  function showToast(message) {
+    const toast = document.getElementById('popup-toast');
+    toast.textContent = message;
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 1000);
+  }
+
+  function highlightWord(word) {
+    const dim = js_vars.dim;
+    const letters = word.toLowerCase().split('');
+
+    for (let dx = -1; dx <= 1; dx++) {
+      for (let dy = -1; dy <= 1; dy++) {
+        if (dx === 0 && dy === 0) continue;
+
+        for (let row = 0; row < dim; row++) {
+          for (let col = 0; col < dim; col++) {
+            let matched = true;
+            let cells = [];
+
+            for (let i = 0; i < letters.length; i++) {
+              const x = row + i * dx;
+              const y = col + i * dy;
+              if (x < 0 || x >= dim || y < 0 || y >= dim) {
+                matched = false;
+                break;
+              }
+
+              const cell = document.getElementById(`cell-${x}-${y}`);
+              if (!cell || cell.textContent.toLowerCase() !== letters[i]) {
+                matched = false;
+                break;
+              }
+
+              cells.push(cell);
+            }
+
+            if (matched) {
+              cells.forEach(cell => {
+                cell.classList.add('highlight');
+                setTimeout(() => cell.classList.remove('highlight'), 1500);
+              });
+              return;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  function onWordFound(word) {
+    word = word.toLowerCase();
+    showToast(`✅ Mot trouvé : ${word.toUpperCase()}`);
+    highlightWord(word);
+
+    if (!foundWordsSet.has(word)) {
+      foundWordsSet.add(word);
+      const li = document.createElement('li');
+      li.textContent = word.toUpperCase();
+      document.getElementById('found-words-list').appendChild(li);
+    }
+  }
+
+  const input = document.getElementById('word');
+  const newsDiv = document.getElementById('news');
+  const scoresBody = document.getElementById('scores-tbody');
+
+  input.addEventListener('keydown', function (event) {
+    newsDiv.innerHTML = '';
+    if (event.key === 'Enter') sendWord();
+  });
+
+  function sendWord() {
+    if (input.reportValidity()) {
+      liveSend({ word: input.value });
+      input.value = '';
+    }
+  }
+
+  function showNews(word, msg, success) {
+    const color = success ? 'green' : 'red';
+    newsDiv.innerHTML = `<span style="color:${color}">${word}: ${msg}</span>`;
+  }
+
+  function liveRecv(data) {
+    if ('news' in data) {
+      const { word, success, already_found, is_in_board, is_in_lexicon, id_in_group } = data.news;
+
+      if (id_in_group === js_vars.my_id) {
+        let msg;
+        if (success) {
+          msg = '+1';
+          onWordFound(word);
+        } else if (already_found) {
+          msg = 'Déjà trouvé';
+        } else if (!is_in_board) {
+          msg = 'Non présent dans la grille';
+        } else {
+          msg = 'Pas dans le dictionnaire';
+        }
+        showNews(word, msg, success);
+      }
+    }
+
+
+    scoresBody.innerHTML = '';
+    for (let [id, score] of data.scores) {
+      let name = `Joueur ${id}`;
+      if (id === js_vars.my_id) name += ' (vous)';
+      scoresBody.insertAdjacentHTML('beforeend', `<tr><td>${name}</td><td>${score} pts</td></tr>`);
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', () => liveSend({}));
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const timeDisplay = document.getElementById("time-left");
+    const otreeSpan = document.querySelector(".otree-timer-wrapper span");
+
+    if (timeDisplay && otreeSpan) {
+        setInterval(() => {
+            timeDisplay.textContent = otreeSpan.textContent;
+        }, 200);
+    }
+});
+
+</script>
+
+{% endblock %}
