@@ -1,0 +1,22 @@
+{% extends "global/Page.html" %}
+
+{{ block title }}
+Vos gains lors de cette tâche
+{{ endblock }}
+
+{{ block content }}
+    <h3>Résultats de ce jeu</h3>
+    <p>Vous avez gagné <strong>{{ total_in_app }}</strong> € dans cette tâche.</p>
+
+    <p>Votre gain cumulé sur l’ensemble des jeux est actuellement de <strong>{{ total_across_apps }}</strong> €.</p>
+
+
+<div class="text-center mt-4">
+    <form method="post">
+
+
+        <button id="next-button" type="submit" class="btn btn-primary">Suivant</button>
+    </form>
+</div>
+
+{% endblock %}

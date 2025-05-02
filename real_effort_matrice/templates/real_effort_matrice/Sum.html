@@ -1,0 +1,170 @@
+{% extends "global/Page.html" %}
+
+{% block content %}
+<style>
+.matrix-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    flex-wrap: wrap;
+    margin-top: 30px;
+}
+
+.matrix-table {
+    border-collapse: collapse;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+}
+
+.matrix-table td {
+    width: 45px;
+    height: 45px;
+    border: 2px solid #ccc;
+    text-align: center;
+    font-family: monospace;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.matrix-table tr:hover td {
+    background-color: #f5f5f5;
+}
+
+.matrix-table td:hover {
+    background-color: #d9edf7;
+    font-weight: bold;
+}
+
+.task-info {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-wrapper label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-wrapper input {
+    width: 200px;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.toast {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 1s ease-in-out;
+}
+
+.toast.success {
+    background-color: #28a745;
+    color: white;
+}
+
+.toast.fail {
+    background-color: #dc3545;
+    color: white;
+}
+#feedback {
+    display: none;
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    font-size: 3rem;
+    z-index: 1000;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+#feedback.show {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+}
+
+#feedback.success {
+    color: #28a745;
+}
+
+#feedback.fail {
+    color: #dc3545;
+}
+
+</style>
+
+<!-- Toast -->
+
+<h2 class="task-info">
+    Tâche {{ subsession.round_number }}
+</h2>
+
+<p class="task-info">
+    <strong>Veuillez trouver le plus grand nombre dans la matrice de gauche et le plus grand nombre dans la matrice de droite, puis entrez la somme des deux.</strong>
+</p>
+
+<p class="task-info">
+    Nombre de bonnes réponses jusqu'à présent : <strong>{{ player.num_correct }}</strong>
+</p>
+
+<div class="matrix-container">
+    <!-- Matrice de gauche -->
+    <table class="matrix-table">
+        {% for row in participant.vars.m_left %}
+        <tr>
+            {% for n in row %}
+            <td>{{ n }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- Matrice de droite -->
+    <table class="matrix-table">
+        {% for row in participant.vars.m_right %}
+        <tr>
+            {% for n in row %}
+            <td>{{ n }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+<div id="toast" class="toast"></div>
+<!-- Feedback popup -->
+<div id="feedback" style="display:none; position:fixed; top:40%; left:50%; transform:translate(-50%, -50%); font-size: 3rem; z-index: 1000;"></div>
+
+<div class="text-center mt-4">
+    <form method="post">
+        <div class="form-wrapper">
+            {% formfield player.answer label="Votre réponse" %}
+        </div>
+
+        <button id="next-button" type="submit" class="btn btn-primary">Suivant</button>
+    </form>
+</div>
+
+
+
+
+
+{% endblock %}
