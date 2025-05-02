@@ -1,0 +1,75 @@
+{{ extends 'global/Page.html' }}
+
+{% block styles %}
+    <link href="{% static 'MPLTEST/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** SCRIPTS *** #}
+{# ****************************************************************************************************************** #}
+{% block scripts %}
+
+        <script>
+            num_tasks = "{{Constants.num_tasks}}";
+
+
+
+
+        </script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+        <script src="{% static 'MPLTEST/js/pie_charts.js' %}"></script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+          <!-- Externality Pop-up Notification -->
+        <div id="externality-popup" class="popup hidden"></div>
+
+{% endblock %}
+{{ block content }}
+    <!-- Countdown Timer -->
+   <div id="circle-timer-container" style="position: fixed; top: 20px; right: 100px; width: 80px; height: 80px; display: flex;">
+    <svg width="80" height="80">
+        <circle cx="40" cy="40" r="35" stroke="red" stroke-width="5" fill="none"></circle>
+        <circle id="progress-circle" cx="40" cy="40" r="35" stroke="#ff9999" stroke-width="5" fill="none"
+           stroke-dasharray="314.16" stroke-dashoffset="314.16"></circle>
+    </svg>
+    <div id="circle-timer-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px;">
+        {{ min_time_seconds }}
+    </div>
+</div>
+<!-- Centered text under the circle -->
+<div id="timer-message" style="position: fixed; top: 120px; right: 80px; width: 100px; height: 80px; display: flex;"
+     style="font-size: 14px;  color: gray; margin-top: 0px;">
+        <!-- Initially empty -->
+     </div>
+
+
+
+
+<h1 class="centered-heading">{% trans "Formulaire de Consentement" %} </h1>
+
+
+<div class="card bg-light m-3">
+
+
+    <div class="card-body">
+<h3 class="centered-heading">{% trans "Rappel :" %} </h3>
+
+<p>Bienvenue à la deuxième session de l’expérience. Lors de la première session, vous avez pris l’engagement de vous présenter à cette seconde session et d’apporter la somme d’argent que vous y avez gagné, à l’exception du montant correspondant aux frais de participation.
+</p>
+<p>Comme expliqué précédemment, l’argent gagné lors de la première session vous servira dans cette session. Vous pourrez l’augmenter ou le diminuer en fonction de vos choix au cours de cette seconde phase de l’expérience.
+</p>
+
+<p>Si vous avez des questions ou des doutes, n’hésitez pas à nous en faire part à tout moment. Nous vous remercions pour votre sérieux et votre participation.</p>
+
+ </div>
+</div>
+<div class="text-center mt-4">
+    <form method="post">
+        <button id="next-button" type="submit" class="btn btn-primary" >Suivant</button>
+    </form>
+</div>
+
+{{ endblock }}

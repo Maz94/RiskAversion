@@ -1,0 +1,41 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Formulaire de Consentement{{ endblock }}
+
+{% block scripts %}
+
+        <script>
+            num_tasks = "{{Constants.num_tasks}}";
+
+
+
+
+        </script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+        <script src="{% static 'MPLTEST/js/pie_charts.js' %}"></script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+          <!-- Externality Pop-up Notification -->
+        <div id="externality-popup" class="popup hidden"></div>
+
+{% endblock %}
+{{ block content }}
+
+<p><strong>Rappel – Début de la deuxième session</strong></p>
+
+<p>Bienvenue à la deuxième session de l’expérience. Lors de la première session, vous avez pris l’engagement de vous présenter à cette seconde session et d’apporter la somme d’argent que vous y avez gagné.
+</p>
+<p>Comme expliqué précédemment, l’argent gagné lors de la première session vous servira de mise pour vos décisions dans cette nouvelle phase de l’expérience. Il est donc essentiel que vous l’utilisiez conformément aux règles établies.
+</p>
+<p>Nous vous rappelons que cette expérience est conçue pour analyser la prise de décision en conditions réelles. Votre engagement à respecter les règles établies est essentiel pour assurer la validité des résultats.</p>
+
+<p>Si vous avez des questions ou des doutes, n’hésitez pas à nous en faire part avant de commencer. Nous vous remercions pour votre sérieux et votre participation.</p>
+
+
+{{ formfields }}
+
+{{ next_button }}
+
+{{ endblock }}

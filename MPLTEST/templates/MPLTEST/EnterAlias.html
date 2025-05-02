@@ -1,0 +1,39 @@
+{% extends "global/Page.html" %}
+{% block scripts %}
+    <script src="{% static 'MPLTEST/js/pie_charts.js' %}"></script>
+{% endblock %}
+
+{% block title %}
+    <h1 class="text-center">{% trans "Entrez votre alias" %}</h1>
+{% endblock %}
+
+{% block content %}
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+
+    <!-- Rendu conditionnel basé sur 'show_next_button' -->
+    {% if not show_next_button %}
+        <form method="post">
+            {{ formfields }}
+
+        </form>
+    {% else %}
+        <p>Votre alias est déjà utilisé. Vous pouvez passer à l'étape suivante.</p>
+        <form method="post">
+
+        </form>
+    {% endif %}
+    </div>
+</div>
+    {% if not show_next_button %}
+
+<p class="text-center">
+     <button id="submit-button" type="submit" class="btn btn-primary">Soumettre l'alias</button>
+</p>
+    {% else %}
+ <input type="hidden" name="move_to_next" value="1">
+            <button id="submit-button" type="submit" class="btn btn-secondary">Passer à l'étape suivante</button>
+
+{% endif %}
+{% endblock %}

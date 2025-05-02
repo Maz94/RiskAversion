@@ -1,0 +1,885 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+{% load i18n %}
+{% block styles %}
+    <link href="{% static 'MPLTEST/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- jQuery (required for Bootstrap 4) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+        <script src="{% static 'MPLTEST/js/pie_charts.js' %}"></script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+          <!-- Externality Pop-up Notification -->
+        <div id="externality-popup" class="popup hidden"></div>
+<script>
+    const externalityValue = {% if treatment == 'green' %}+3{% else %}-3{% endif %};
+    const externalityText = "{% if treatment == 'green' %}+3 €{% else %}-3 €{% endif %}";
+    const externalityColor = "{% if treatment == 'green' %}green{% else %}brown{% endif %}";
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    Highcharts.chart('pie_1', {
+        chart: {
+            type: 'pie',
+            height: 300,
+            backgroundColor: 'rgba(255, 255, 255, 0.002)',
+            spacing: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilité pour l\'Investissement A' %}",
+            style: {
+                fontSize: '14px'
+            }
+        },
+        tooltip: {
+    formatter: function () {
+        return `
+            <b>${this.point.name}</b><br>
+            Probabilité: ${this.point.percentage.toFixed(1)}%<br>
+            Externalité: <b style="color:${externalityColor}">${externalityText}</b>
+        `;
+    }
+}
+,
+        plotOptions: {
+            pie: {
+                center: ['50%', '50%'],
+                slicedOffset: 5,
+                dataLabels: {
+                    enabled: true,
+                    distance: 10,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        fontSize: '10px',
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: "{% trans 'Probabilité' %}",
+            colorByPoint: true,
+            data: [
+                { name: "{% trans ' 0€' %} ", y: 70, externality: 3 },
+                { name: "{% trans ' 100€' %} ", y: 30, externality: 3 }
+            ]
+        }]
+    });
+});
+document.addEventListener('DOMContentLoaded', function () {
+    Highcharts.chart('pie_12', {
+        chart: {
+            type: 'pie',
+            height: 300,
+            backgroundColor: 'rgba(255, 255, 255, 0.002)',
+            spacing: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilité pour l\'Investissement B' %}",
+            style: {
+                fontSize: '14px'
+            }
+        },
+        tooltip: {
+    formatter: function () {
+        return `
+            <b>${this.point.name}</b><br>
+            Probabilité: ${this.point.percentage.toFixed(1)}%<br>
+            Externalité: <b style="color:${externalityColor}">${externalityText}</b>
+        `;
+    }
+}
+,
+        plotOptions: {
+            pie: {
+                center: ['50%', '50%'],
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: "{% trans 'Probabilité' %}",
+            colorByPoint: true,
+            data: [
+                { name: "{% trans ' X €' %} ", y: 100, externality: 3 }
+            ]
+        }]
+    });
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    Highcharts.chart('pie_2', {
+        chart: {
+            type: 'pie',
+            height: 300,
+            backgroundColor: 'rgba(255, 255, 255, 0.002)',
+            spacing: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilité pour l\'Investissement A' %}",
+            style: {
+                fontSize: '14px'
+            }
+        },
+        tooltip: {
+    formatter: function () {
+        return `
+            <b>${this.point.name}</b><br>
+            Probabilité: ${this.point.percentage.toFixed(1)}%<br>
+            Externalité: <b style="color:${externalityColor}">${externalityText}</b>
+        `;
+    }
+}
+,
+        plotOptions: {
+            pie: {
+                center: ['50%', '50%'],
+                slicedOffset: 5,
+                dataLabels: {
+                    enabled: true,
+                    distance: 10,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        fontSize: '10px',
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: "{% trans 'Probabilité' %}",
+            colorByPoint: true,
+            data: [
+                { name: "{% trans ' -40€' %} ", y: 20, externality: 3 },
+                { name: "{% trans ' 80€' %} ", y: 80, externality: 3 }
+            ]
+        }]
+    });
+});
+document.addEventListener('DOMContentLoaded', function () {
+    Highcharts.chart('pie_22', {
+        chart: {
+            type: 'pie',
+            height: 300,
+            backgroundColor: 'rgba(255, 255, 255, 0.002)',
+            spacing: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilité pour l\'Investissement B' %}",
+            style: {
+                fontSize: '14px'
+            }
+        },
+        tooltip: {
+    formatter: function () {
+        return `
+            <b>${this.point.name}</b><br>
+            Probabilité: ${this.point.percentage.toFixed(1)}%<br>
+        `;
+    }
+}
+,
+        plotOptions: {
+            pie: {
+                center: ['50%', '50%'],
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: "{% trans 'Probabilité' %}",
+            colorByPoint: true,
+            data: [
+                { name: "{% trans ' X €' %} ", y: 100}
+            ]
+        }]
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    Highcharts.chart('pie_3', {
+        chart: {
+            type: 'pie',
+            height: 300,
+           backgroundColor: 'rgba(255, 255, 255, 0.002)',
+            spacing: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilité pour l\'Investissement A' %}",
+            style: {
+                fontSize: '14px'
+            }
+        },
+        tooltip: {
+    formatter: function () {
+        return `
+            <b>${this.point.name}</b><br>
+            Probabilité: ${this.point.percentage.toFixed(1)}%<br>
+            Externalité: <b style="color:${externalityColor}">${externalityText}</b>
+        `;
+    }
+}
+,
+        plotOptions: {
+            pie: {
+                center: ['50%', '50%'],
+                slicedOffset: 5,
+                dataLabels: {
+                    enabled: true,
+                    distance: 10,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        fontSize: '10px',
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: "{% trans 'Probabilité' %}",
+            colorByPoint: true,
+            data: [
+                { name: "{% trans ' -60€' %} ", y: 50, externality: 3 },
+                { name: "{% trans ' 0€' %} ", y: 50, externality: 3 }
+            ]
+        }]
+    });
+});
+document.addEventListener('DOMContentLoaded', function () {
+    Highcharts.chart('pie_32', {
+        chart: {
+            type: 'pie',
+            height: 300,
+            backgroundColor: 'rgba(255, 255, 255, 0.002)',
+            spacing: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilité pour l\'Investissement B' %}",
+            style: {
+                fontSize: '14px'
+            }
+        },
+        tooltip: {
+    formatter: function () {
+        return `
+            <b>${this.point.name}</b><br>
+            Probabilité: ${this.point.percentage.toFixed(1)}%<br>
+            Externalité: <b style="color:${externalityColor}">${externalityText}</b>
+        `;
+    }
+}
+,
+        plotOptions: {
+            pie: {
+                center: ['50%', '50%'],
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: "{% trans 'Probabilité' %}",
+            colorByPoint: true,
+            data: [
+                { name: "{% trans ' X €' %} ", y: 100, externality: 3 }
+            ]
+        }]
+    });
+});
+</script>
+ <h1 class="text-center">{% trans "Test de Compréhension" %}</h1>
+
+<div class="card bg-light m-3">
+
+    <div class="card-body">
+
+
+        <div class="alert alert-warning ">
+             <h4 class="text-center">{% trans "Résumé des Instructions" %}</h4>
+
+                <p>{% trans "Dans cette expérience, vous ferez face à plusieurs séries de décisions, où vous devrez choisir entre l'Investissement A et l'Investissement B. Les résultats de chaque choix dépendront des probabilités fournies et des externalités générées." %}</p>
+
+                <ul>
+                    <li>{% trans "Le résultat de l'Investissement A varie en fonction du tirage de la loterie, tandis que l'Investissement B garantit un résultat fixe." %}</li>
+                    <li>{% trans "Certains Investissements génèrent des externalités environnementales." %}</li>
+
+                    {% if treatment == 'brown' %}
+
+                    <li>{% trans "Les externalités négatives représentent des dommages environnementaux." %}</li>
+
+                    {% else %}
+
+                    <li>{% trans "Les externalités positives contribuent aux améliorations environnementales." %}</li>
+                    {% endif %}
+
+                </ul>
+
+                <p>{% trans "Prenez en compte tous ces facteurs avec soin, car chaque décision influencera le résultat global de l'expérience." %}</p>
+            </div>
+    <hr>
+<br>
+        <p >{% trans "Veuillez répondre aux questions suivantes pour confirmer votre compréhension de l'expérience: " %}</p>
+<br>
+
+
+
+
+
+<div style="display: flex; align-items: flex-start">
+    <!-- Chart 1 with externality badge -->
+    <div style="position: relative; width: 550px; height: 300px;">
+        <div id="pie_1" class="pie-chart" style="width: 100%; height: 100%;"></div>
+        <div class="flash-icon" style="
+            position: absolute;
+            top: 48%;
+            right: 43%;
+             padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
+            {% if treatment == 'green' %}
+                background-color: lightgreen;
+                color: green;
+            {% else %}
+                background-color: #f3d1c3;
+                color: brown;
+            {% endif %}
+        ">
+            {% if treatment == 'green' %}
+                +3 €
+            {% else %}
+                -3 €
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Chart 2 with externality badge -->
+    <div style="position: relative; width: 550px; height: 300px; ">
+        <div id="pie_12" class="pie-chart" style="width: 100%; height: 100%;"></div>
+        <div class="flash-icon" style="
+            position: absolute;
+           top: 48%;
+            right: 43%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
+            {% if treatment == 'green' %}
+                background-color: lightgreen;
+                color: green;
+            {% else %}
+                background-color: #f3d1c3;
+                color: brown;
+            {% endif %}
+        ">
+            {% if treatment == 'green' %}
+                +3 €
+            {% else %}
+                -3 €
+            {% endif %}
+        </div>
+    </div>
+</div>
+<br>
+        <table class="table table-striped table-centered">
+            <thead class="table text-center">
+                <tr class="header">
+                    <th class="small-cell">{% trans "Investissement A " %}</th>
+                    <th class="lottery_a_tick">{% trans "Risqué" %}</th>
+                    <th class="lottery_a_tick">{% trans "Sûr" %}</th>
+                    <th class="small-cell">{% trans "Investissement B " %}</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="lottery_a">
+
+                        <li> <b>{{ lottery_hi.0}}€</b> {% trans "avec une probabilité de" %} <b>{{ p1.0 }}%</b>
+                        {% trans "ou" %} <b>{{ lottery_lo.0}}€</b> {% trans "avec une probabilité de" %} <b>{{ p2.0 }}%</b> </li>
+
+                    {% if ext_risky.0 != 0 %}
+                         <li>  <span> {% trans "Une externalité de" %}
+                            <span style="color: {% if ext_risky.0 > 0 %}green{% else %}brown{% endif %}; font-weight: bold;">
+                                {% if ext_risky.0 > 0 %}+{% endif %}{{ ext_risky.0 }}€
+                            </span>
+                            {% trans "sera générée dans les deux cas." %}
+                        </span></li>
+                        {% endif %}
+                    </td>
+
+                    <td class="lottery_a_tick">
+
+                        <label class="radio-container">
+                <input type="radio" name="practice_choice1" value="Risky" checked disabled >
+                            <span class="checkmark"></span>
+
+            </label>
+                        </td>
+                    <td class="lottery_b_tick">
+                        <label class="radio-container">
+                       <input type="radio" name="practice_choice1" value="Safe" disabled>
+                            <span class="checkmark"></span>
+
+            </label>
+             </td>
+
+                    <td class="lottery_b">
+                     <li> <b>{{ safe_outcome.0 }}€</b> {% trans "garantis." %} </li>
+                    {% if  ext_safe.0 != 0 %}
+                      <li>   <span> {% trans "Une externalité de" %}
+                            <span style="color: {% if ext_safe.0 > 0 %}green{% else %}brown{% endif %}; font-weight: bold;">
+                                {% if ext_safe.0 > 0 %}+{% endif %}{{ ext_safe.0 }}€
+                            </span>
+                            {% trans "sera générée." %}
+                        </span> </li>
+                        {% endif %}</td>
+                </tr>
+            </tbody>
+        </table>
+<br>
+        <form method="post">
+
+             <div class="form-group">
+                   <label class="radio-inline">
+        <p><strong>1. {% trans "Si l'issue défavorable se produit (70% de chance) dans l'Investissement A, que recevrez-vous ?" %}</strong></p>
+                <div>
+                    <label class="radio">
+                        <input type="radio" name="question1" value="option1"> {% trans "0 €, et une externalité est générée." %}
+                    </label>
+                    </div>
+                   <div>
+                    <label class="radio">
+                        <input type="radio" name="question1" value="option2"> {% trans "50 €, et une externalité est générée." %}
+                    </label>
+                </div>
+
+            </div>
+ </label>
+            <div class="form-group">
+                     <label class="radio-inline">
+<p><strong>2. {% trans "Vrai ou Faux : Êtes-vous chargé(e) de payer le coût de l'externalité générée par l'Investissement A ?" %}</strong></p>
+                <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question2" value="option1"> {% trans "Vrai" %}
+                    </label>
+                     <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question2" value="option2"> {% trans "Faux" %}
+                    </label>
+                </div>
+
+            </div>
+</label>
+
+
+</div>
+
+
+<br>
+    <hr>
+<br>
+<div class="pie-chart">
+
+
+<div style="display: flex; align-items: flex-start">
+    <!-- Chart 1 with externality badge -->
+    <div style="position: relative; width: 550px; height: 300px;">
+        <div id="pie_2" class="pie-chart" style="width: 100%; height: 100%;"></div>
+        <div class="flash-icon" style="
+            position: absolute;
+            top: 48%;
+            right: 43%;
+             padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
+            {% if treatment == 'green' %}
+                background-color: lightgreen;
+                color: green;
+            {% else %}
+                background-color: #f3d1c3;
+                color: brown;
+            {% endif %}
+        ">
+            {% if treatment == 'green' %}
+                +3 €
+            {% else %}
+                -3 €
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Chart 2 with externality badge -->
+    <div style="position: relative; width: 550px; height: 300px;">
+        <div id="pie_22" class="pie-chart" style="width: 100%; height: 100%;"></div>
+
+    </div>
+</div>
+
+
+<br>
+
+        <table class="table table-striped table-centered">
+            <thead class="table text-center">
+                <tr class="header">
+                     <th class="small-cell">{% trans "Investissement A " %}</th>
+                    <th class="lottery_a_tick">{% trans "Risqué" %}</th>
+                    <th class="lottery_a_tick">{% trans "Sûr" %}</th>
+                    <th class="small-cell">{% trans "Investissement B " %}</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="lottery_a">
+                         <li> <b>{{ lottery_hi.1 }}€</b> {% trans "avec une probabilité de" %} <b>{{ p1.1 }}%</b>
+                        {% trans "ou" %} <b>{{ lottery_lo.1}}€</b> {% trans "avec une probabilité de" %} <b>{{ p2.1 }}%</b> </li>
+                         {% if  ext_risky.1 != 0 %}
+                        <span> <li> {% trans "Une externalité de" %}
+                            <span style="color: {% if ext_risky.1 > 0 %}green{% else %}brown{% endif %}; font-weight: bold;">
+                                {% if ext_risky.1 > 0 %}+{% endif %}{{ ext_risky.1 }}€
+                            </span>
+                            {% trans "sera générée dans les deux cas." %} </li>
+                        </span>
+                        {% endif %}
+                        </p>
+                    </td>
+                    <td class="lottery_a_tick">
+ <label class="radio-container">
+                <input type="radio" name="practice_choice2" value="Risky" disabled>
+                            <span class="checkmark"></span>
+
+            </label>
+                        </td>
+                    <td class="lottery_b_tick">
+                        <label class="radio-container">
+                       <input type="radio" name="practice_choice2" value="Safe" disabled  checked>
+                            <span class="checkmark"></span>
+
+            </label>
+             </td>
+
+
+                    <td class="lottery_b">
+                       <li>  <b>{{ safe_outcome.1}}€</b> {% trans "garantis." %}</li>
+                         {% if  ext_safe.1 != 0 %}
+                        <li> <span> {% trans "Une externalité de" %}
+                            <span style="color: {% if ext_safe.1 > 0 %}green{% else %}brown{% endif %}; font-weight: bold;">
+                                {% if ext_safe.1 > 0 %}+{% endif %}{{ ext_safe.1 }}€
+                            </span>
+                            {% trans "sera générée." %}</li>
+                        </span>
+                        {% endif %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+
+
+
+            <div class="form-group">
+        <p><strong>3. {% trans "Si vous choisissez l'Investissement B, quel est le résultat ?" %}</strong></p>
+                <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question3" value="option1"> {% trans "-20€, et une externalité est générée." %}
+                    </label>
+                    <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question3" value="option2"> {% trans "-20€, et aucune externalité n'est générée." %}
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+         <p><strong>4. {% trans "Vrai ou Faux : Des externalités sont générées par l'Investissement A et l'Investissement B dans ce scénario." %}</strong></p>
+                <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question4" value="option1"> {% trans "Vrai" %}
+                    </label>
+                    <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question4" value="option2"> {% trans "Faux" %}
+                    </label>
+                </div>
+            </div>
+
+
+            </div>
+</div>
+<br>
+    <hr>
+<br>
+
+
+<div style="display: flex; align-items: flex-start">
+    <!-- Chart 1 with externality badge -->
+    <div style="position: relative; width: 550px; height: 300px;">
+        <div id="pie_3" class="pie-chart" style="width: 100%; height: 100%;"></div>
+        <div class="flash-icon" style="
+            position: absolute;
+            top: 48%;
+            right: 43%;
+             padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
+            {% if treatment == 'green' %}
+                background-color: lightgreen;
+                color: green;
+            {% else %}
+                background-color: #f3d1c3;
+                color: brown;
+            {% endif %}
+        ">
+            {% if treatment == 'green' %}
+                +3 €
+            {% else %}
+                -3 €
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Chart 2 with externality badge -->
+    <div style="position: relative; width: 550px; height: 300px;">
+        <div id="pie_32" class="pie-chart" style="width: 100%; height: 100%;"></div>
+        <div class="flash-icon" style="
+            position: absolute;
+           top: 48%;
+            right: 43%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
+            {% if treatment == 'green' %}
+                background-color: lightgreen;
+                color: green;
+            {% else %}
+                background-color: #f3d1c3;
+                color: brown;
+            {% endif %}
+        ">
+            {% if treatment == 'green' %}
+                +3 €
+            {% else %}
+                -3 €
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+<br>
+
+
+        <table class="table table-striped table-centered">
+            <thead class="table text-center">
+                <tr class="header">
+                    <th class="small-cell">{% trans "Investissement A " %}</th>
+                    <th class="lottery_a_tick">{% trans "Risqué" %}</th>
+                    <th class="lottery_a_tick">{% trans "Sûr" %}</th>
+                    <th class="small-cell">{% trans "Investissement B " %}</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr>
+                    <td class="lottery_a">
+                     <li>  <b>{{ lottery_hi.2}}€</b> {% trans "avec une probabilité de" %} <b>{{ p1.2 }}%</b>
+                        {% trans "ou" %} <b>{{ lottery_lo.2}}€</b> {% trans "avec une probabilité de" %} <b>{{ p2.2 }}%</b> </li>
+                    {% if ext_risky.2 != 0 %}
+                      <li>  <span> {% trans "Une externalité de" %}
+                            <span style="color: {% if ext_risky.2 > 0 %}green{% else %}brown{% endif %}; font-weight: bold;">
+                                {% if ext_risky.2 > 0 %}+{% endif %}{{ ext_risky.2 }}€
+                            </span>
+                            {% trans "sera générée dans les deux cas." %}
+                        </span></li>
+                        {% endif %}
+                    </td>
+
+                    <td class="lottery_a_tick">
+                                        <label class="radio-container">
+
+                <input type="radio" name="practice_choice3" value="Risky" checked disabled >
+                            <span class="checkmark"></span>
+
+            </label>
+                        </td>
+                    <td class="lottery_b_tick">
+                                            <label class="radio-container">
+
+                       <input type="radio" name="practice_choice3" value="Safe" disabled>
+                            <span class="checkmark"></span>
+
+            </label>
+             </td>
+
+
+                    <td class="lottery_b">
+                        <li><b>{{ safe_outcome.2 }}€</b> {% trans "garantis." %} </li>
+                    {% if  ext_safe.0 != 0 %}
+                       <li>  <span> {% trans "Une externalité de" %}
+                            <span style="color: {% if ext_safe.2 > 0 %}green{% else %}brown{% endif %}; font-weight: bold;">
+                                {% if ext_safe.2 > 0 %}+{% endif %}{{ ext_safe.2 }}€
+                            </span>
+                            {% trans "sera générée." %} </li>
+                        </span></p>
+                        {% endif %}</td>
+                </tr>
+            </tbody>
+        </table>
+
+</div>
+
+
+            <!-- Question 5 -->
+            <div class="form-group">
+                <p><strong>5. {% trans "Si l'Investissement A aboutit au résultat élevé, que recevrez-vous ?" %}</strong></p>
+                <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question5" value="option1"> {% trans "0€." %}
+                    </label>
+                    </div>
+                   <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question5" value="option2"> {% trans "-60€." %}
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="form-group">
+                <p><strong>6. {% trans "Si l'Investissement A aboutit à 0 €, que se passe-t-il avec l'externalité ?" %}</strong></p>
+                <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question6" value="option1"> {% trans "L'externalité est générée" %}
+                    </label>
+                    </div>
+                   <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question6" value="option2"> {% trans "Aucune externalité n'est générée" %}
+                    </label>
+                </div>
+            </div>
+
+<hr>
+
+            <!-- Question 7 -->
+            <div class="form-group">
+                <p><strong>7. {% trans "Vrai ou Faux : Votre capital initial gagné lors de la session précédente sera utilisé au cours de l’expérience." %}</strong></p>
+                <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question7" value="option1"> {% trans "Vrai" %}
+                    </label>
+                    </div>
+                   <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question7" value="option2"> {% trans "Faux" %}
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="form-group">
+                <p><strong>8. {% trans "Le projet South Pole finance des initiatives environnementales en réduisant les émissions de CO₂. Selon vous, combien de kilogrammes de CO₂ peuvent être compensés par un don de 5€ ?" %}</strong></p>
+                <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question8" value="option1"> {% trans "10kg" %}
+                    </label>
+                    </div>
+                   <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question8" value="option2"> {% trans "5kg" %}
+                    </label>
+                    </div>
+                   <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question8" value="option3"> {% trans "20kg" %}
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="form-group">
+                <p><strong>9. {% trans "Vrai ou Faux : Dans cette expérience, en fonction de vos décisions et du hasard, vous pouvez aussi perdre de l’argent et terminer l’expérience avec moins d’argent que ce que vous aviez au départ." %}</strong></p>
+                <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question9" value="option1"> {% trans "Vrai" %}
+                    </label>
+                    </div>
+                   <div>
+                    <label class="radio-inline">
+                        <input type="radio" name="question9" value="option2"> {% trans "Faux" %}
+                    </label>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</div>
+ <p class="text-center">
+            <button class="btn btn-primary">{% trans "Soumettre la décision" %}</button>
+        </p>
+
+
+    </div>
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+
+
+{% endblock %}

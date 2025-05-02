@@ -1,0 +1,257 @@
+{{ extends 'global/Page.html' }}
+
+{% block styles %}
+    <link href="{% static 'MPLTEST/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** SCRIPTS *** #}
+{# ****************************************************************************************************************** #}
+{% block scripts %}
+
+             <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+        <script src="{% static 'MPLTEST/js/pie_charts.js' %}"></script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+          <!-- Externality Pop-up Notification -->
+        <div id="externality-popup" class="popup hidden"></div>
+
+
+  <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const earningsField = document.querySelector('[name="first_session_earnings"]');
+    const broughtField = document.querySelector('[name="amount_brought"]');
+    const reasonField = document.querySelector('[name="reason_for_difference"]');
+    const submitButton = document.querySelector('#next-button');
+
+    let errorMessage = document.createElement("p");
+    errorMessage.style.color = "red";
+    errorMessage.style.fontSize = "14px";
+    errorMessage.style.marginTop = "5px";
+    errorMessage.style.display = "none";
+    reasonField.parentNode.appendChild(errorMessage);
+
+    function validateForm() {
+        let earnings = parseFloat(earningsField.value) || 0;
+        let brought = parseFloat(broughtField.value) || 0;
+        let reason = reasonField.value.trim();
+
+        if (earnings !== brought) {
+            if (reason.length < 30) {
+                reasonField.setCustomValidity("Veuillez écrire au moins 30 caractères.");
+                errorMessage.textContent = "Veuillez écrire au moins 30 caractères pour expliquer la différence.";
+                errorMessage.style.display = "block";
+                submitButton.disabled = true;
+            } else {
+                reasonField.setCustomValidity("");
+                errorMessage.style.display = "none";
+                submitButton.disabled = false;
+            }
+        } else {
+            reasonField.setCustomValidity("");
+            errorMessage.style.display = "none";
+            submitButton.disabled = false;
+        }
+    }
+
+    earningsField.addEventListener("input", validateForm);
+    broughtField.addEventListener("input", validateForm);
+    reasonField.addEventListener("input", validateForm);
+});
+</script>
+
+
+
+{% endblock %}
+
+
+{% block content %}
+    <!-- Countdown Timer -->
+   <div id="circle-timer-container" style="position: fixed; top: 20px; right: 100px; width: 80px; height: 80px; display: flex;">
+    <svg width="80" height="80">
+        <circle cx="40" cy="40" r="35" stroke="red" stroke-width="5" fill="none"></circle>
+        <circle id="progress-circle" cx="40" cy="40" r="35" stroke="#ff9999" stroke-width="5" fill="none"
+           stroke-dasharray="314.16" stroke-dashoffset="314.16"></circle>
+    </svg>
+    <div id="circle-timer-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px;">
+        {{ min_time_seconds }}
+    </div>
+</div>
+<!-- Centered text under the circle -->
+<div id="timer-message" style="position: fixed; top: 120px; right: 80px; width: 100px; height: 80px; display: flex;"
+     style="font-size: 14px;  color: gray; margin-top: 0px;">
+        <!-- Initially empty -->
+     </div>
+
+    <h1 class="text-center mt-4">Questionnaire</h1>
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+
+        <p class="text-center">
+            Bienvenue à la deuxième session de l’expérience. Avant de commencer, veuillez répondre aux questions suivantes.
+        </p>
+
+                <!-- Questionnaire Form -->
+        <form method="post" style="max-width: 700px; margin: auto;">
+            <div class="mb-4">
+                {{ formfield "first_session_earnings" }}
+            </div>
+
+            <div class="mb-4">
+                {{ formfield "amount_brought" }}
+            </div>
+            <div class="mb-4">
+                {{ formfield "reason_for_difference" }}
+            </div>
+            <hr>
+
+
+
+            <div class="mb-4">
+                {{ formfield "equivalent_expense" }}
+            </div>
+            <hr>
+
+<!-- MISSING FIELD: Emotional Attachment (Fixed) -->
+            <div class="mb-4">
+                <label for="emotional_attachment">Sur une échelle de 1 à 5, à quel point vous sentez-vous attaché(e) à l’argent gagné lors de la première session ? (1 = pas du tout, 5 = extrêmement)</label>
+                <div class="slider-container">
+                    <input type="range" id="emotional_attachment" name="emotional_attachment" min="1" max="5" step="1" value="3" class="slider">
+                    <div class="slider-scale">
+                        <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+  <div class="mb-4">
+                <label for="pain_of_losing">Sur une échelle de 1 à 5, à quel point la perte de cette somme vous affecterait-elle ? (1=pas du tout, 5=énormément)</label>
+                <div class="slider-container">
+                    <input type="range" id="pain_of_losing" name="pain_of_losing" min="1" max="5" step="1" value="3" class="slider">
+                    <div class="slider-scale">
+                        <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                    </div>
+                </div>
+            </div>
+<hr>
+
+
+
+<hr>
+
+
+
+
+  <div class="mb-4">
+                {{ formfield "strategy_change" }}
+            </div>
+
+
+        </form>
+
+    </div>
+</div>
+
+  <div class="text-center mt-4">
+                <button id="next-button" type="submit" class="btn btn-primary" >Continuer</button>
+            </div>
+<!-- Submit Button -->
+
+{% endblock %}
+
+
+{% block styles %}
+<style>
+    .slider-container {
+        position: relative;
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+        padding-bottom: 10px;
+    }
+
+    .slider {
+        width: 100%;
+        -webkit-appearance: none;
+        appearance: none;
+        background: #ddd;
+        border-radius: 5px;
+        height: 10px;
+        outline: none;
+        transition: background 0.2s;
+    }
+
+    .slider:hover {
+        background: #ccc;
+    }
+
+    /* Small dents (ticks) on the scale */
+    .slider-scale {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        color: #555;
+        margin-top: 10px;
+        width: 100%;
+        position: relative;
+    }
+
+    .slider-scale span {
+        position: relative;
+    }
+
+    /* Add small ticks below each scale number */
+    .slider-scale span::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 8px;
+        background: black;
+    }
+
+    .slider-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #333;
+        margin-top: 10px;
+    }
+/* Align the thumb precisely */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: -10px; /* Adjust for perfect centering */
+}
+    /* Make the slider button bigger */
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #007bff;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: #007bff;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+

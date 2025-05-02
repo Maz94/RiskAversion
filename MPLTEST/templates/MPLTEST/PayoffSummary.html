@@ -1,0 +1,74 @@
+{% extends "global/Page.html" %}
+
+{% block title %}
+    <h1 class="text-center">Résumé de vos gains</h1>
+{% endblock %}
+
+{% block content %}
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+
+        <h2>Explication de vos gains</h2>
+        <p>
+            Vos gains sont calculés en prenant en compte :
+            <ul>
+                <li>Les gains obtenus lors de cette session de l'expérience.</li>
+                <li>Vos gains accumulés lors de la session précédente et rejoués lors de la seconde session.</li>
+               <li>Un dédommagement de 5€ pour votre participation à cette session.</li>
+            </ul>
+        </p>
+
+        <hr>
+
+        <h3>Externalités générées</h3>
+        {% if total_externality > 0 %}
+            <p>
+                Vous avez généré une <b>externalité positive de €{{ total_externality }}</b>.
+            </p>
+            <p>
+                Grâce à vos choix, la donation au <b>South Pole Project sera augmentée</b>.
+                Vous avez contribué positivement à un projet environnemental !
+            </p>
+
+        {% elif total_externality < 0 %}
+            <p>
+                Vous avez généré une <b>externalité négative de €{{ total_externality }}</b>.
+            </p>
+            <p>
+                En raison de ces externalités, la donation au <b>South Pole Project sera réduite</b>.
+                Vos décisions ont eu un impact négatif sur le projet environnemental soutenu.
+            </p>
+
+        {% else %}
+            <p>
+                Vous n'avez généré <b>aucune externalité lors de cette session</b>.
+            </p>
+            <p>
+                La donation au <b>South Pole Project restera inchangée</b>.</p>
+                <p>   Votre participation n’a eu ni effet positif ni négatif sur le projet.
+            </p>
+        {% endif %}
+
+        <hr>
+
+        <p>Gain obtenu lors de cette session : <strong>€{{ experiment_payoff }}</strong></p>
+        <p>Vos gains lors de la session précédente : <strong>€{{ endowment }} </strong></p>
+        <p>Frais de participation (Session 2) : <strong>€{{ participation_fee_session_2 }}</strong></p>
+
+
+        <hr>
+
+        <p><strong>Vous repartez donc avec : {{ total_payoff }} €</strong></p>
+          <p><strong>Total des externalités générées : €{{ total_externality }}</strong></p>
+
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <form method="post">
+        <button id="next-button" type="submit" class="btn btn-primary">Suivant</button>
+    </form>
+</div>
+
+{% endblock %}

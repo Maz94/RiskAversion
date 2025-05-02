@@ -1,0 +1,165 @@
+{% extends "global/Page.html" %}
+
+{% block title %}
+    <h1 class="text-center mt-4">Questionnaire sur vos gains et votre impact</h1>
+{% endblock %}
+
+{% block content %}
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+        <p class="text-center">
+            Merci d’avoir participé à cette expérience ! Avant de terminer, veuillez répondre à ces quelques questions concernant vos gains et votre contribution environnementale.
+        </p>
+
+        <!-- Survey Form -->
+        <form method="post" style="max-width: 700px; margin: auto;">
+
+            <!-- Satisfaction with Payoff -->
+            <div class="mb-4">
+                <label>Comment évaluez-vous votre satisfaction par rapport à vos gains finaux ?</label>
+                <div class="slider-container">
+                    <input type="range" id="satisfaction" name="satisfaction" min="1" max="7" step="1" value="4" class="slider">
+                    <div class="slider-scale">
+                        <span>Très insatisfait</span><span></span><span></span><span>Neutre</span><span></span><span></span><span>Très satisfait</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <!-- Perceived Contribution to the Environment -->
+            <div class="mb-4">
+                <label>Pensez-vous avoir contribué de manière positive à l’environnement au cours de cette expérience ?</label>
+                <div class="slider-container">
+                    <input type="range" id="env_contribution" name="env_contribution" min="1" max="7" step="1" value="4" class="slider">
+                    <div class="slider-scale">
+                        <span>Pas du tout</span><span></span><span></span><span>Modérément</span><span></span><span></span><span>Beaucoup</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+
+            <hr>
+
+            <!-- Influence of Externalities -->
+            <div class="mb-4">
+                <label>À quel point les externalités ont-elles influencé vos choix ?</label>
+                <div class="slider-container">
+                    <input type="range" id="externalities_influence" name="externalities_influence" min="1" max="7" step="1" value="4" class="slider">
+                    <div class="slider-scale">
+                        <span>Pas du tout</span><span></span><span></span><span>Un peu</span><span></span><span></span><span>Beaucoup</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <!-- Did Externalities Impact Their View of the Experiment? -->
+            <div class="mb-4">
+                <label>Votre perception de l’expérience a-t-elle changé en raison des externalités ?</label>
+                <div class="slider-container">
+                    <input type="range" id="experiment_perception" name="experiment_perception" min="1" max="7" step="1" value="4" class="slider">
+                    <div class="slider-scale">
+                        <span>Non</span><span></span><span></span><span>Un peu</span><span></span><span></span><span>Beaucoup</span>
+                    </div>
+                </div>
+            </div>
+            <hr>
+
+            <!-- Open-ended: What influenced their choices the most? -->
+           <div class="mb-4">
+                <label>Quels éléments ont le plus influencé vos décisions aujourd'hui ?</label>
+                    {{ form.factors_influencing_choices }}
+            </div>
+
+
+            <hr>
+
+            <!-- Open-ended: Any additional comments? -->
+            <div class="mb-4">
+                <label>Avez-vous des commentaires sur l’expérience ou le système de rémunération ?</label>
+                <textarea name="comments" rows="3" class="form-control" placeholder="Vos retours sont précieux..."></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center mt-4">
+                <button id="next-button" type="submit" class="btn btn-primary">Valider et continuer</button>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
+
+{% block styles %}
+<style>
+    .slider-container {
+        position: relative;
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+        padding-bottom: 10px;
+    }
+
+    .slider {
+        width: 100%;
+        -webkit-appearance: none;
+        appearance: none;
+        background: #ddd;
+        border-radius: 5px;
+        height: 10px;
+        outline: none;
+        transition: background 0.2s;
+    }
+
+    .slider:hover {
+        background: #ccc;
+    }
+
+    .slider-scale {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        color: #555;
+        margin-top: 10px;
+        width: 100%;
+        position: relative;
+    }
+
+    .slider-scale span {
+        position: relative;
+    }
+
+    .slider-scale span::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 8px;
+        background: black;
+    }
+
+    /* Style du bouton de la barre */
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #007bff;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: #007bff;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+</style>
+{% endblock %}

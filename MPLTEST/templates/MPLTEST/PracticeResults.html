@@ -1,0 +1,180 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+{% load i18n %}
+ {% block scripts %}
+
+
+
+  <script>
+document.addEventListener("DOMContentLoaded", function() {
+    let endowment = parseFloat("{{ endowment }}");
+    let showup = parseFloat("{{ showup }}");
+    let selected_practice_result = parseFloat("{{ selected_practice.result }}");
+
+    let endowmentDisplay = endowment.toFixed(2);
+    let totalRaw = endowment + showup + selected_practice_result;
+    let totalDisplay = totalRaw.toFixed(2);
+
+    console.log("Total payout:", totalDisplay); // Debug
+
+    // Display values in HTML
+    document.getElementById("totalDisplay").innerText = totalDisplay;
+
+    let num_tasks = "{{ Constants.num_tasks }}";
+    let num_payoff = "{{ Constants.num_payoff }}";
+});
+</script>
+
+
+
+
+
+
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+        <script src="{% static 'MPLTEST/js/pie_charts.js' %}"></script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+          <!-- Externality Pop-up Notification -->
+        <div id="externality-popup" class="popup hidden"></div>
+        {% if Constants.enforce_consistency == True %}
+                <script src="{% static 'MPLTEST/js/consistency.js' %}"></script>
+
+
+        {% endif %}
+{% endblock %}
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+    <!-- Countdown Timer -->
+   <div id="circle-timer-container" style="position: fixed; top: 20px; right: 100px; width: 80px; height: 80px; display: flex;">
+    <svg width="80" height="80">
+        <circle cx="40" cy="40" r="35" stroke="red" stroke-width="5" fill="none"></circle>
+        <circle id="progress-circle" cx="40" cy="40" r="35" stroke="#ff9999" stroke-width="5" fill="none"
+           stroke-dasharray="314.16" stroke-dashoffset="314.16"></circle>
+    </svg>
+    <div id="circle-timer-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px;">
+        {{ min_time_seconds }}
+    </div>
+</div>
+<!-- Centered text under the circle -->
+<div id="timer-message" style="position: fixed; top: 120px; right: 80px; width: 100px; height: 80px; display: flex;"
+     style="font-size: 14px;  color: gray; margin-top: 0px;">
+        <!-- Initially empty -->
+     </div>
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+        <h4 class="text-center">{% trans "Comprendre vos résultats d'entraînement" %}</h4>
+<p>
+    {% trans "Dans ce tour d'entraînement, vous avez pris trois décisions impliquant différentes loteries et Investissements sûrs. Après avoir terminé les tâches, l'une de vos décisions a été sélectionnée aléatoirement pour le paiement. Cela signifie que le résultat de cette tâche spécifique déterminera les gains hypothétiques de cette session d'entraînement." %}
+</p>
+<p>
+    {% trans "Si la tâche choisie impliquait une externalité, celle-ci est également générée en même temps que le paiement. Il est important de noter que le coût ou le bénéfice de l'externalité est pris en charge par l'expérimentateur et n'affecte pas vos gains personnels." %}
+</p>
+<p>
+    <p>{% trans "L'expérience réelle consistera en" %} {{ num_tasks }} {% trans "tâches. Après avoir pris vos décisions dans toutes les tâches, " %}{{ num_payoff }} {% trans "choix vous seront rémunérés à la fin de l'expérience" %}</p>
+</p>
+<p>
+    {% trans "Cette approche reflète des situations de prise de décision dans le monde réel, où à la fois les résultats personnels et les effets externes sont pris en compte." %}
+</p>
+<b class="text-center">
+    {% trans "Merci pour votre participation, et n'oubliez pas que vos choix jouent un rôle non seulement dans vos gains, mais aussi dans la détermination de l'impact externe des décisions prises au cours de l'expérience." %}
+</b>
+
+
+
+</div>
+
+        <table class="table table-bordered">
+            <thead class="table text-center">
+                <tr>
+                    <th>{% trans "Tâche" %}</th>
+<th>{% trans "Choix" %}</th>
+<th>{% trans "Investissement A" %}</th>
+<th>{% trans "Investissement B" %}</th>
+<th>{% trans "Résultat" %}</th>
+<th>{% trans "Externalité" %}</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for choice in practice_choices %}
+                <tr {% if choice.task_number == selected_practice.task_number %} class="table-warning" {% endif %}>
+                    <td>{{ choice.task_number }}</td>
+                    <td>
+                        {% if choice.choice_made == 'Risky' %}
+                            {% trans "Investissement A " %}
+                        {% else %}
+                            {% trans "Investissement B " %}
+                        {% endif %}
+                    </td>
+                    <td>
+                       {{ choice.lottery_hi  }} € ({{ choice.p1 }}%) {% trans "ou" %} {{ choice.lottery_lo  }} € ({{ choice.p2 }}%)
+                    </td>
+                    <td> {{ choice.safe_outcome }} €</td>
+                     <td>{{ choice.result }} €</td>
+                    {% if choice.choice_made == 'Risky' %}
+                         <td>{{ choice.ext_risky  }} €</td>
+                    {% else %}
+                         <td>{{ choice.ext_safe  }} €</td>
+                     {% endif %}
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="text-center">{% trans "No practice choices made yet." %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+       <div class="alert alert-success ">
+
+         <p>
+
+            <b>  {% trans "Explication du résultat" %}:</b>
+             {% if selected_practice.choice_made == 'Risky' %}
+      <li>  Dans cet entraînement, la tâche <b>n°{{selected_practice.task_number}}</b> a été aléatoirement sélectionnée pour être jouée. Lors de cette tâche, vous avez choisi
+
+           <b>{% trans " l'Investissement A." %}</b>
+
+          Pour ce choix, un tirage aléatoire a été fait et le résultat de votre choix est de <b>{{ selected_practice.result }} €</b> </li>
+               {% else %}
+             <li>  Dans cet entraînement, la tâche <b>n°{{selected_practice.task_number}}</b> a été aléatoirement sélectionnée pour être jouée. Lors de cette tâche, vous avez choisi <b>  {% trans "l'Investissement B." %}</b></li>
+             <li>Le résultat de votre choix est de <b>{{ selected_practice.result }} €</b></li>
+              {% endif %}
+
+<li>Votre Gain lors de la première session est de <b> {{ endowment }}€</b></li>
+
+
+             <li>Les frais de participations sont de <b>{{ showup }} €</b> </li>
+
+<li>
+    Ainsi, votre paiement est donc de
+    <b>{{ selected_practice.result }} € +  {{ endowment }} € + {{ showup }} € = <span id="totalDisplay"></span> €</b>.
+</li>
+
+
+</p>
+</div>
+ </div>
+<div class="alert alert-info text-center">
+    {% trans "Ce n'était qu'une manche d'entraînement. L'expérience réelle va maintenant commencer." %}
+</div>
+
+
+ </div>
+    </div>
+
+
+
+<div class="text-center mt-4">
+    <form method="post">
+        <button id="next-button" type="submit" class="btn btn-primary">Continuer</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,174 @@
+{% extends "global/Page.html" %}
+{% load otree %}
+{% load i18n %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<!-- Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- jQuery (required for Bootstrap 4) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+<form action="/SaveDB/" method="POST">
+    <!-- Form fields here -->
+</form>
+
+
+<div class="card bg-light m-0">
+        <!-- Countdown Timer -->
+   <div id="circle-timer-container" style="position: fixed; top: 20px; right: 100px; width: 80px; height: 80px; display: flex;">
+    <svg width="80" height="80">
+        <circle cx="40" cy="40" r="35" stroke="red" stroke-width="5" fill="none"></circle>
+        <circle id="progress-circle" cx="40" cy="40" r="35" stroke="#ff9999" stroke-width="5" fill="none"
+           stroke-dasharray="314.16" stroke-dashoffset="314.16"></circle>
+    </svg>
+    <div id="circle-timer-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px;">
+        {{ min_time_seconds }}
+    </div>
+</div>
+<!-- Centered text under the circle -->
+<div id="timer-message" style="position: fixed; top: 120px; right: 80px; width: 100px; height: 80px; display: flex;"
+     style="font-size: 14px;  color: gray; margin-top: 0px;">
+        <!-- Initially empty -->
+     </div>
+
+    <div class="card-body">
+        <h3 class="text-center">{% trans "Résultats de l'expérience" %}</h3>
+
+        <h5>{% trans "Vos choix sélectionnés pour le paiement" %}</h5>
+        <table class="table table-striped">
+            <thead class="table text-center">
+
+                <tr>
+                   <th>{% trans "Tâche" %}</th>
+<th>{% trans "Numéro du Choix" %}</th>
+<th>{% trans "Choix" %}</th>
+<th>{% trans "Résultat (€)" %}</th>
+<th>{% trans "Externalité (€)" %}</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                {% for choice in selected_choices %}
+                <tr>  <!-- Highlight Selected Choices -->
+                    <td>{{ choice.task_number }}</td>
+                    <td>{{ choice.choice_number }}</td>
+                   <td> {% if choice.choice_made == 'Safe' %}
+                             Option B (Sûre)
+                            {% elif choice.choice_made == 'Risky' %}
+                                       Option A (Risquée)
+                                    {% endif %}
+                             </td>
+
+
+
+                    <td>€{{ choice.payoff}}</td>
+
+                    <td>
+ <span style="color: {% if choice.externality > 0 %}green{% else %}brown{% endif %}">
+
+        {% if choice.choice_made == 'Safe' %}
+
+            €{{ choice.externality  }}
+        {% else %}
+            €{{ choice.externality }}
+        {% endif %}
+
+    </span>
+</td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Collapsible Button -->
+         <p class="text-center">
+
+        <button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#detailsTable" aria-expanded="false" aria-controls="detailsTable">
+
+{% trans "Voir tous les choix effectués" %}
+        </button> </p>
+
+        <!-- Collapsible Table -->
+        <div class="collapse mt-3" id="detailsTable">
+            <div class="card card-body">
+<h5 class="text-center">{% trans "Résumé de tous les choix effectués" %}</h5>
+                <table class="table table-bordered">
+            <thead class="table text-center">
+                        <tr>
+    <th>{% trans "Tâche" %}</th>
+    <th>{% trans "Numéro du choix" %}</th>
+    <th>{% trans "Choix" %}</th>
+    <th>{% trans "Option A" %}</th>
+    <th>{% trans "Option B" %}</th>
+    <th>{% trans "Externalité" %}</th>
+</tr>
+
+                    </thead>
+                    <tbody>
+                        {% for choice in all_choices %}
+                        <tr
+                            {% for selected in selected_choices %}
+                                {% if choice.task_number == selected.task_number and choice.choice_number == selected.choice_number %}
+                                    class="table-warning"
+                                {% endif %}
+                            {% endfor %}
+                        >
+                            <td>{{ choice.task_number }}</td>
+                            <td>{{ choice.choice_number }}</td>
+                             <td> {% if choice.choice_made == 'Safe' %}
+                             Option B (Sûre)
+                            {% elif choice.choice_made == 'Risky' %}
+                                          Option A (Risquée)
+                                    {% endif %}
+                             </td>
+                            <td>{{ choice.x1  }} € ({{ choice.p1 }}%) ou {{ choice.x2 }} € ({{ choice.p2 }}%)</td>
+                            <td>{{ choice.y  }} €</td>
+                            <td>
+                                <span style="color: {% if choice.externality_safe > 0 or choice.externality_risky > 0 %}green{% else %}brown{% endif %}">
+                                    {% if choice.choice_made == 'Safe' %}
+                                        €{{ choice.externality_safe }}
+                                    {% else %}
+                                        €{{ choice.externality_risky }}
+                                    {% endif %}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+       <h4 class="mt-4">{% trans "Gain Final dû à vos décisions" %}: €{{ decision_payoff }}</h4>
+<h4>{% trans "Total des Externalités Générées" %}:
+            <span style="color: {% if total_externality > 0 %}green{% else %}brown{% endif %};">
+                €{{ total_externality }}
+            </span>
+        </h4>
+        <!-- Thank You Message Based on Externality and Treatment -->
+        <div class="alert mt-5 {% if total_externality > 0 %}alert-success{% elif total_externality < 0 %}alert-danger{% else %}alert-secondary{% endif %}">
+            <h5 class="text-center">
+                {% if total_externality > 0 %}
+    {% blocktrans %}Merci pour votre participation. Vos décisions ont contribué à hauteur de €{{ total_externality }} à un fonds de dons qui sera reversé à une ONG environnementale dédiée à la lutte contre le changement climatique.{% endblocktrans %}
+{% elif total_externality < 0 %}
+    {% blocktrans %}Merci pour votre participation. En raison de vos décisions, €{{ total_externality }} ont été déduits du fonds de dons destiné à une ONG environnementale. Vos choix lors de cette expérience ont eu un impact négatif sur l'environnement.{% endblocktrans %}
+{% else %}
+    {% blocktrans %}Merci pour votre participation. Vos décisions n'ont eu aucun impact sur le fonds de dons. Les investissements neutres ont permis de maintenir l'équilibre du fonds.{% endblocktrans %}
+{% endif %}
+
+            </h5>
+        </div>
+
+    </div>
+</div>
+<div class="text-center mt-4">
+    <form method="post">
+         <button id="next-button" type="submit" class="btn btn-primary">Suivant</button>`
+    </form>
+</div>
+{% endblock %}

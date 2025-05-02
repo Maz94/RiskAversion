@@ -1,0 +1,779 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+{% load i18n %}
+
+{# ****************************************************************************************************************** #}
+{# *** STYLES *** #}
+{# ****************************************************************************************************************** #}
+{% block styles %}
+    <link href="{% static 'MPLTEST/css/custom.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** SCRIPTS *** #}
+{# ****************************************************************************************************************** #}
+{% block scripts %}
+
+
+        <script>
+            num_tasks = "{{Constants.num_tasks}}";
+            num_choices = "{{Constants.num_choices}}";
+            p1 = "{{ p1.0 }}";
+            p2 = "{{ p2.0 }}";
+            lottery_hi = "{{ lottery_hi.0 }}";
+            lottery_lo = "{{ lottery_lo.0 }}";
+            externality_safe =  "{{externality_safe}}";
+            externality_risky = "{{externality_risky}}";
+            treatment = "{{treatment}}";
+
+            const p1_value = {{ p1.0 }};
+            const p2_value = {{ p2.0 }};
+            const lottery_a_hi = "{{ lottery_hi.0 }}";
+            const lottery_a_lo = "{{ lottery_lo.0 }}";
+
+
+
+    const externalityColor = "{% if treatment == 'green' %}green{% else %}brown{% endif %}";
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+   const safe_outcome = {{ safe_outcome.0 }};
+   const lottery_hi = {{ lottery_hi.0 }};
+   const lottery_lo = {{ lottery_lo.0 }};
+   Highcharts.chart('pie_1', {
+        chart: {
+            type: 'pie',
+            height: 300,
+            backgroundColor: 'rgba(255, 255, 255, 0.002)',
+
+            spacing: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilité pour l\'Investissement B' %}",
+            style: {
+                fontSize: '14px'
+            }
+        },
+       tooltip: {
+    formatter: function () {
+        let ext = this.point.externality;
+        let tooltip = `<b>${this.point.name}</b><br>Probabilité: ${this.point.percentage.toFixed(1)}%`;
+        if (ext && ext !== 0) {
+            tooltip += `<br>Externalité: <b style="color: ${externalityColor}">${ext > 0 ? '+' : ''}${ext} €</b>`;
+        }
+        return tooltip;
+    }
+}
+
+,
+        plotOptions: {
+            pie: {
+                center: ['50%', '50%'],
+                slicedOffset: 0,
+                dataLabels: {
+                    enabled: true,
+                    distance: 10,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        fontSize: '10px',
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        },
+          series: [{
+    name: "{% trans 'Probabilité' %}",
+    colorByPoint: true,
+    data: [
+    {
+        name: "{% trans ' X€' %}",
+        y: 100
+        {% if ext_safe != 0 %}, externality: {{ ext_safe }}{% endif %},
+        color:
+        {% if safe_outcome.0 == 0 %}
+            'lightgrey'
+        {% elif safe_outcome.0 > 3  %}
+
+     {% if safe_outcome.0 < lottery_hi.0 and lottery_lo.0 >= 0 %}
+            '#3385ff'
+           {% else %}
+            '#005bff'
+           {% endif %}
+        {% elif safe_outcome.0 < -3 %}
+            {% if safe_outcome.0 > lottery_hi.0 and safe_outcome.0 < lottery_lo.0 %}
+             '#e25962'
+           {% else %}
+           '#c51a2c'
+           {% endif %}
+        {% elif safe_outcome.0 > 0 and safe_outcome.3 < 4 %}
+            '#66b2ff'
+        {% elif safe_outcome.0 < 0 and safe_outcome.3 < -4%}
+            '#ff9999'
+        {% endif %}
+    }
+]
+
+}]
+
+    });
+});
+document.addEventListener('DOMContentLoaded', function () {
+    // Define the high and low outcomes
+    const lottery_hi = {{ lottery_hi.0 }};
+    const lottery_lo = {{ lottery_lo.0 }};
+
+    // Determine the maximum gain and maximum loss
+    const maxGain = Math.max(lottery_hi, lottery_lo);
+    const maxLoss = Math.min(lottery_hi, lottery_lo);
+
+    // Helper function to determine colors
+    const getColor = (value) => {
+        if (value > 0) {
+            return (value === maxGain) ? '#005bff' : '#66b2ff';  // Darker and lighter blue
+        } else if (value < 0) {
+            return (value === maxLoss) ? '#c51a2c' : '#ff9999';  // Darker and lighter red
+        } else {
+            return '#b3b3b3';  // Neutral gray for zero outcome
+        }
+    };
+
+    Highcharts.chart('pie_a', {
+        chart: {
+             type: 'pie',
+            height: 300,
+            backgroundColor: 'rgba(255, 255, 255, 0.002)',
+
+            spacing: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilités pour l\'Investissement A' %}",
+             style: {
+                fontSize: '14px'
+            }
+        },
+         tooltip: {
+    formatter: function () {
+        let ext = this.point.externality;
+        let tooltip = `<b>${this.point.name}</b><br>Probabilité: ${this.point.percentage.toFixed(1)}%`;
+        if (ext && ext !== 0) {
+            tooltip += `<br>Externalité: <b style="color: ${externalityColor}">${ext > 0 ? '+' : ''}${ext} €</b>`;
+        }
+        return tooltip;
+    }
+}
+,
+        plotOptions: {
+            pie: {
+                   center: ['50%', '50%'],
+                   slicedOffset: 5,  // Distance between slice and center
+
+                   dataLabels: {
+                      enabled: true,
+                      distance: 10,
+
+                      format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                      style: {
+                        fontSize: '10px',
+                         fontWeight: 'bold'
+                      }
+                   }
+                }
+        },
+        series: [{
+            name: "{% trans 'Probabilité' %}",
+            colorByPoint: true,
+           data: [
+    {
+        name: "{{ lottery_hi.0 }}€",
+        y: {{ p1.0 }},
+        color: getColor({{ lottery_hi.0 }})
+        {% if ext_risky != 0 %}, externality: {{ ext_risky }}{% endif %}
+    },
+    {
+        name: "{{ lottery_lo.0 }}€",
+        y: {{ p2.0 }},
+        color: getColor({{ lottery_lo.0 }})
+        {% if ext_risky != 0 %}, externality: {{ ext_risky }}{% endif %}
+    }
+]
+
+        }]
+    });
+});
+
+
+        </script>
+        <!-- ✅ CSS (always first, in <head> ideally) -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="{% static 'MPLTEST/css/custom.css' %}" rel="stylesheet">
+
+
+        <div id="externality-popup" class="popup hidden"></div>
+
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
+{% block title %}
+
+     <div class="progress mt-3 mb-1">
+          {% if progress_percentage < 30 %}
+         <div id="progress-bar1" class="progress-bar1"
+         style="width: {{ progress_percentage }}%;"
+         aria-valuenow="{{ progress_percentage }}"
+         aria-valuemin="0" aria-valuemax="100">
+              {{ round_number }}/ {{ total_tasks }}
+
+          </div>
+          {% elif progress_percentage >= 30 and progress_percentage < 70 %}
+
+        <div id="progress-bar2" class="progress-bar2"
+         style="width: {{ progress_percentage }}%;"
+         aria-valuenow="{{ progress_percentage }}"
+         aria-valuemin="0" aria-valuemax="100">
+              {{ round_number }}/ {{ total_tasks }}
+        </div>
+          {% else %}
+         <div id="progress-bar3" class="progress-bar3"
+         style="width: {{ progress_percentage }}%;"
+         aria-valuenow="{{ progress_percentage }}"
+         aria-valuemin="0" aria-valuemax="100">
+              {{ round_number }}/ {{ total_tasks }}
+        </div>
+           {% endif %}
+</div>
+
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{% block content %}
+<h3 class="centered-heading">{% trans "Tâche" %} {{ task_number }}</h3>
+
+   <div class="card bg-light m-3">
+
+    <div class="card-body">
+
+        <!-- Countdown Timer -->
+   <div id="circle-timer-container" style="position: fixed; top: 20px; right: 100px; width: 80px; height: 80px; display: flex;">
+    <svg width="80" height="80">
+        <circle cx="40" cy="40" r="35" stroke="red" stroke-width="5" fill="none"></circle>
+        <circle id="progress-circle" cx="40" cy="40" r="35" stroke="#ff9999" stroke-width="5" fill="none"
+           stroke-dasharray="314.16" stroke-dashoffset="314.16"></circle>
+    </svg>
+    <div id="circle-timer-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px;">
+        {{ min_time_seconds }}
+    </div>
+
+<!-- Centered text under the circle -->
+<div id="timer-message" style="position: fixed; top: 120px; right: 80px; width: 100px; height: 80px; display: flex;"
+     style="font-size: 14px;  color: gray; margin-top: 0px;">
+        <!-- Initially empty -->
+     </div>
+</div>
+
+
+
+
+<br>
+
+<p>
+{% if lottery_hi.0 > 0 %}
+   <li class="justified-text">
+    {% trans "Vous avez une opportunité d'investissement." %}
+
+</li>
+
+{% else %}
+   <li class="justified-text">
+
+
+
+  {% trans "Vous gérez un investissement comportant des pertes potentielles." %}
+
+</li>
+
+{% endif %}
+</p>
+<!-- Positive and Negative Externality Conditions  -->
+{% if externality_safe.0 > 0 and externality_risky.0 > 0 %}
+
+  <p>
+
+        <span>
+    <i class="fas fa-exclamation-triangle flash-icon" id="triangle-icon" style="color: red;"></i>
+
+</span>
+       Les deux Investissements d’investissement génèrent des <b>externalités environnementales positives</b>.
+
+  </p>
+                    <p class="justified-text">
+ <li> {% trans "Veuillez prendre vos décisions dans le tableau ci-dessous et cliquer sur le bouton" %} <b>{% trans "Suivant" %}</b> {% trans "en bas de la page." %}</p></li>
+  </p>
+                     <div class="text-center">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#instructionsCollapse1" aria-expanded="false" aria-controls="instructionsCollapse1">
+                {% trans "Afficher plus d'information" %}
+            </button>
+        </div>
+<div class="collapse mt-1" id="instructionsCollapse1">
+            <div class="card card-body">
+
+
+                     <p>   Cette externalité représente l'impact environnemental direct de votre investissement, indépendamment du rendement financier obtenu:
+<li>Si un investissement avec une externalité positive est choisi puis tiré au sort à la fin de l'expérience, 5€ seront ajoutés à un fonds de donation destiné au South Pole Project.</li>
+<li>Chaque 5 € ajoutés au fonds de donation correspondent à une compensation d’environ 5 kg de CO₂.</li> </p>
+
+            </div>
+        </div>
+
+{% elif externality_safe.0 < 0 and externality_risky.0 < 0 %}
+    <p class="justified-text">
+
+<span>
+    <i class="fas fa-exclamation-triangle flash-icon" id="triangle-icon" style="color: red;"></i>
+
+</span>
+
+
+
+     <u>Les deux options d’investissement s’accompagnent <b>d’externalités environnementales négatives</b></u>.
+
+
+
+    </p>
+ <li> {% trans "Veuillez prendre vos décisions dans le tableau ci-dessous et cliquer sur le bouton" %} <b>{% trans "Suivant" %}</b> {% trans "en bas de la page." %}</p></li>
+
+
+                     <div class="text-center">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#instructionsCollapse2" aria-expanded="false" aria-controls="instructionsCollapse2">
+                {% trans "Afficher plus d'information" %}
+            </button>
+        </div>
+<div class="collapse mt-1" id="instructionsCollapse2">
+            <div class="card card-body">
+
+
+                     <p>   Cette externalité représente l'impact environnemental direct de votre investissement, indépendamment du rendement financier obtenu:
+<li>Si un investissement avec une externalité négative est choisi puis tiré au sort à la fin de l'expérience, 5€ seront déduits du fonds de donation destiné au South Pole Project.</li>
+<li>Chaque 5 € déduits du fonds de donation correspondent à une réduction d’environ 5 kg de CO₂ compensés.</li> </p>
+
+
+            </div>
+        </div>
+
+
+
+        </div>
+
+{% elif externality_safe.0 > 0 and externality_risky.0 < 0 %}
+    <p class="justified-text">
+
+<span>
+    <i class="fas fa-exclamation-triangle flash-icon" id="triangle-icon" style="color: red;"></i>
+
+</span>
+       <u>Opter pour l'investissement sûr génère un <b>rendement externe positif</b> de <b>{{ externality_safe.0 }}</b>, alors que l'investissement plus risqué entraîne un <b>coût externe</b> de <b>{{ externality_risky.0 }}</b>.</u>
+
+     <li> L’Investissement sûr contribue à un bénéfice environnemental de +5 €. </li>
+    </span>
+    </p>
+
+                     <div class="text-center">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#instructionsCollapse3" aria-expanded="false" aria-controls="instructionsCollapse3">
+                {% trans "Afficher plus d'information" %}
+            </button>
+        </div>
+             <div class="collapse mt-1" id="instructionsCollapse3">
+            <div class="card card-body">
+
+
+                     <p>   Cette externalité représente le bienfait environnemental indirect de votre investissement, indépendamment du rendement financier obtenu:
+<li>Si un investissement avec une externalité positive est choisi puis tiré au sort à la fin de l'expérience, 5€ seront ajoutés à un fonds de donation destiné au South Pole Project.</li>
+<li>Chaque 5 € ajoutés au fonds de donation correspondent à une compensation d’environ 5 kg de CO₂.</li> </p>
+
+
+            </div>
+        </div>
+{% elif externality_safe.0 < 0 and externality_risky.0 > 0 %}
+   <p class="justified-text">
+
+<span>
+    <i class="fas fa-exclamation-triangle flash-icon" id="triangle-icon" style="color: red;"></i>
+</span>
+      <u>{% trans "L'investissement risqué génère un rendement externe positif de" %} <b>{{ externality_risky.0 }}</b>, {% trans "mais l'Investissement sûre entraîne un coût externe de" %} <b>{{ externality_safe.0 }}</b>.</u>
+
+ <li> {% trans "Veuillez prendre vos décisions dans le tableau ci-dessous et cliquer sur le bouton" %} <b>{% trans "Suivant" %}</b> {% trans "en bas de la page." %}</p></li>
+
+   </p>
+
+                     <div class="text-center">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#instructionsCollapse4" aria-expanded="false" aria-controls="instructionsCollapse4">
+                {% trans "Afficher plus d'information" %}
+            </button>
+        </div>
+                   <div class="collapse mt-1" id="instructionsCollapse4">
+            <div class="card card-body">
+
+
+                     <p>   Cette externalité représente le bienfait environnemental indirect de votre investissement, indépendamment du rendement financier obtenu:
+<li>Si un investissement avec une externalité positive est choisi puis tiré au sort à la fin de l'expérience, 5€ seront ajoutés à un fonds de donation destiné au South Pole Project.</li>
+<li>Chaque 5 € ajoutés au fonds de donation correspondent à une compensation d’environ 5 kg de CO₂.</li> </p>
+
+
+            </div>
+        </div>
+{% elif externality_safe.0 > 0 %}
+    <p class="justified-text">
+
+<span>
+    <i class="fas fa-exclamation-triangle flash-icon" id="triangle-icon" style="color: red;"></i>
+
+</span>
+       <u>L'investissement sûr aboutit à un <b>rendement externe positif</b> de <b>{{ externality_safe.0 }}</b>.
+L'investissement risqué n'entraîne aucun impact environnemental.</u>
+
+ <li> {% trans "Veuillez prendre vos décisions dans le tableau ci-dessous et cliquer sur le bouton" %} <b>{% trans "Suivant" %}</b> {% trans "en bas de la page." %}</p></li>
+
+
+         <li> L’Investissement sûr contribue à un bénéfice environnemental de +5 €, correspondant aux effets positifs associés à cette décision. </li>
+    </p>
+                               <div class="text-center">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#instructionsCollapse5" aria-expanded="false" aria-controls="instructionsCollapse5">
+                {% trans "Afficher plus d'informations" %}
+            </button>
+        </div>
+                   <div class="collapse mt-1" id="instructionsCollapse5">
+            <div class="card card-body">
+
+
+                     <p>   Cette externalité représente le bienfait environnemental indirect de votre investissement, indépendamment du rendement financier obtenu:
+<li>Si un investissement avec une externalité positive est choisi puis tiré au sort à la fin de l'expérience, 5€ seront ajoutés à un fonds de donation destiné au South Pole Project.</li>
+<li>Chaque 5 € ajoutés au fonds de donation correspondent à une compensation d’environ 5 kg de CO₂.</li> </p>
+
+
+            </div>
+
+        </div>
+{% elif externality_safe.0 < 0 %}
+   <p class="justified-text">
+
+<span>
+    <i class="fas fa-exclamation-triangle flash-icon" id="triangle-icon" style="color: red;"></i>
+
+</span>
+     <u>L'investissement sûr comporte un <b>coût externe</b> de <b>{{ externality_safe.0 }}</b>.
+L'investissement risqué n'entraîne aucun impact environnemental.</u>
+
+ <li> {% trans "Veuillez prendre vos décisions dans le tableau ci-dessous et cliquer sur le bouton" %} <b>{% trans "Suivant" %}</b> {% trans "en bas de la page." %}</p></li>
+
+
+   </p>
+                           <div class="text-center">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#instructionsCollapse6" aria-expanded="false" aria-controls="instructionsCollapse6">
+                {% trans "Afficher plus d'informations" %}
+            </button>
+        </div>
+<div class="collapse mt-1" id="instructionsCollapse6">
+            <div class="card card-body">
+
+                     <p>   Cette externalité représente l'impact environnemental direct de votre investissement, indépendamment du rendement financier obtenu:</p>
+
+<li>Si un investissement avec une externalité négative est choisi puis tiré au sort à la fin de l'expérience, 5€ seront déduits d’un fonds de donation initialement destiné au South Pole Project.</li>
+<li>Chaque 5 € retirés du fonds de donation correspondent à une réduction d’environ 5 kg de CO₂ compensés.</li> </p>
+
+
+            </div>
+        </div>
+{% elif externality_risky.0 > 0 %}
+  <p class="justified-text">
+
+<span>
+    <i class="fas fa-exclamation-triangle flash-icon" id="triangle-icon" style="color: red;"></i>
+
+</span>
+     <u>L'investissement risqué génère un <b>rendement externe positif</b> de <b>{{ externality_risky.0 }}</b>.
+L'investissement sûr n'entraîne aucun impact environnemental.</u>
+
+ <li> {% trans "Veuillez prendre vos décisions dans le tableau ci-dessous et cliquer sur le bouton" %} <b>{% trans "Suivant" %}</b> {% trans "en bas de la page." %}</p></li>
+
+
+
+  </p>
+                               <div class="text-center">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#instructionsCollapse7" aria-expanded="false" aria-controls="instructionsCollapse7">
+                {% trans "Afficher plus d'informations" %}
+            </button>
+        </div>
+    <div class="collapse mt-1" id="instructionsCollapse7">
+            <div class="card card-body">
+
+
+                     <p>   Cette externalité représente le bienfait environnemental indirect de votre investissement, indépendamment du rendement financier obtenu:
+<li>Si un investissement avec une externalité positive est choisi puis tiré au sort à la fin de l'expérience, 5€ seront ajoutés à un fonds de donation destiné au South Pole Project.</li>
+<li>Chaque 5 € ajoutés au fonds de donation correspondent à une compensation d’environ 5 kg de CO₂.</li> </p>
+
+
+            </div>
+        </div>
+{% elif externality_risky.0 < 0 %}
+  <p class="justified-text">
+
+<span>
+    <i class="fas fa-exclamation-triangle flash-icon" id="triangle-icon" style="color: red;"></i>
+
+</span>
+       <u>L'investissement risqué entraîne une <b>externalité environnementale</b> de <b>{{ externality_risky.0 }}</b>.
+L'investissement sûr n'entraîne aucune externalité environnementale.</u>
+
+
+
+ <li> {% trans "Veuillez prendre vos décisions dans le tableau ci-dessous et cliquer sur le bouton" %} <b>{% trans "Suivant" %}</b> {% trans "en bas de la page." %}</p></li>
+
+
+
+
+  </p>
+                      <div class="text-center">
+            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#instructionsCollapse8" aria-expanded="false" aria-controls="instructionsCollapse8">
+                {% trans "Afficher plus d'information" %}
+            </button>
+        </div>
+<div class="collapse mt-1" id="instructionsCollapse8">
+            <div class="card card-body">
+                <p>   Cette externalité représente l'impact environnemental direct de votre investissement, indépendamment du rendement financier obtenu:</p>
+
+<li>Si un investissement avec une externalité négative est choisi puis tiré au sort à la fin de l'expérience, 5€ seront déduits d’un fonds de donation initialement destiné au South Pole Project.</li>
+<li>Chaque 5 € retirés du fonds de donation correspondent à une réduction d’environ 5 kg de CO₂ compensés.</li> </p>
+
+
+            </div>
+        </div>
+
+{% else %}
+   <p class="justified-text">
+<li><u>Aucune des deux Investissements n'entraîne d'impact environnemental.</u></li>
+
+
+
+ <li> {% trans "Veuillez prendre vos décisions dans le tableau ci-dessous et cliquer sur le bouton" %} <b>{% trans "Suivant" %}</b> {% trans "en bas de la page." %}</p></li>
+
+ </p>
+
+{% endif %}
+
+<br>
+
+<div style="display: flex; align-items: flex-start">
+    <!-- Chart 1 with externality badge -->
+    <div style="position: relative; width: 550px; height: 300px;">
+        <div id="pie_a" class="pie-chart" style="width: 100%; height: 100%;"></div>
+        {% if ext_risky != 0 %}
+
+
+        <div class="flash-icon" style="
+            position: absolute;
+            top: 48%;
+            right: 43%;
+             padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
+            {% if treatment == 'green' %}
+                background-color: lightgreen;
+                color: green;
+            {% else %}
+                background-color: #f3d1c3;
+                color: brown;
+            {% endif %}
+        ">
+            {% if treatment == 'green' %}
+                +5 €
+            {% else %}
+                -5 €
+            {% endif %}
+        </div>
+         {% endif %}
+
+    </div>
+
+    <!-- Chart 2 with externality badge -->
+    <div style="position: relative; width: 550px; height: 300px; ">
+        <div id="pie_1" class="pie-chart" style="width: 100%; height: 100%;"></div>
+
+         {% if ext_safe != 0 %}
+        <div class="flash-icon" style="
+            position: absolute;
+           top: 48%;
+            right: 43%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
+            {% if treatment == 'green' %}
+                background-color: lightgreen;
+                color: green;
+            {% else %}
+                background-color: #f3d1c3;
+                color: brown;
+            {% endif %}
+        ">
+            {% if treatment == 'green' %}
+                +5 €
+            {% else %}
+                -5 €
+            {% endif %}
+        </div>
+                    {% endif %}
+
+    </div>
+</div>
+
+
+
+
+   <br>
+
+
+    <div class="card">
+        <table class="table table-striped table-centered">
+            <thead>
+
+                     <tr class="header">
+                    <th class="small-cell">{% trans "Investissement A " %}</th>
+                    <th class="lottery_a_tick">{% trans "Risqué" %}</th>
+                    <th class="lottery_a_tick">{% trans "Sûr" %}</th>
+                    <th class="small-cell">{% trans "Investissement B " %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for index, form_field, lottery_hi, p1, lottery_lo, p2, safe_outcome,  externality_risky,  externality_safe in choices %}
+                <tr>
+                    <!-- A lotteries -->
+                    <td class="lottery_a">
+                      <li>  <b>{{ lottery_hi }}</b> {% trans "avec une probabilité de " %}<b>{{ p1 }}</b>, ou
+    <b>{{ lottery_lo }}</b> {% trans "avec une probabilité de " %}<b>{{ p2 }}</b>.</li>
+    {% if externality_risky != 0 %}
+  <li>  <span> {% trans "Une externalité de" %}
+        <span style="color: {% if externality_risky > 0 %}green{% else %}brown{% endif %}; font-weight: bold;">
+            {% if externality_risky > 0 %}+{% endif %} {{ externality_risky }}
+        </span>
+        {% trans "sera générée dans les deux cas." %}
+    </span>
+                        </span></li>
+                        {% endif %}
+
+                        <!-- Radio select form fields -->
+
+                    <td class="lottery_a_tick">
+                    <label class="radio-container">
+                    {% if externality_risky > 0 %}
+                        <input type="radio" name="{{ form_field }}" value="Risky" onclick="showExternality(this, 'risky',+5)">
+                        <span class="externality-display"><span style="color: green;"></span>
+
+
+                    {% elif externality_risky < 0 %}
+
+                        <input type="radio" name="{{ form_field }}" value="Risky" onclick="showExternality(this, 'risky',-5)">
+                        <span class="externality-display"><span style="color: brown;"></span>
+
+                    {% else %}
+                        <input type="radio" name="{{ form_field }}" value="Risky">
+
+
+                        {% endif %}
+                     <!-- Externality Pop-up (Hidden by Default) -->
+                            <div class="popup hidden"></div>
+
+                     </label>
+                      </td>
+                    <td class="lottery_b_tick">
+                        <label class="radio-container">
+                        {% if externality_safe > 0 %}
+
+                            <input type="radio" name="{{ form_field }}" value="Safe" onclick="showExternality(this, 'safe', +5)">
+                            <span class="externality-display"><span style="color: green;"></span>
+                                {% elif externality_safe < 0 %}
+
+                                    <input type="radio" name="{{ form_field }}" value="Safe" onclick="showExternality(this, 'safe', -5)">
+                                    <span class="externality-display"><span style="color: brown;"></span>
+                                    {% else %}
+                                    <input type="radio" name="{{ form_field }}" value="Safe" >
+                                    {% endif %}
+
+                            <!-- Externality Pop-up (Hidden by Default) -->
+                            <div class="popup hidden"></div>
+                        </label>
+
+                    </td>
+                    <!-- Externality Notification Container -->
+                    <div id="externality-container" class="externality-stack"></div>
+
+                    <!-- B lotteries -->
+                    <td class="lottery_b">
+                    <li> <b>{{ safe_outcome }}</b> {% trans "garantis." %}</li>
+{% if externality_safe != 0 %}
+<li><span>{% trans "Une externalité de" %}
+    <span style="color: {% if externality_safe > 0 %}green{% else %}brown{% endif %}; font-weight: bold;">
+        {% if externality_safe > 0 %}+{% endif %}{{ externality_safe }}
+    </span>
+    {% trans "sera générée." %}
+</span></li>
+{% endif %}
+    </p>
+
+                    </td>
+                </tr>
+                {% endfor %}
+
+           </tbody>
+        </table>
+
+    </div>
+</div>
+          </div>
+
+
+<div class="text-center mt-4">
+    <form method="post">
+        <button id="next-button" type="submit" class="btn btn-primary" disabled>Suivant</button>
+    </form>
+</div>
+<!-- ✅ JavaScript libraries (place these at the bottom of <body> ideally, or after your content) -->
+
+<!-- jQuery (must come first for Bootstrap JS to work) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+
+<!-- Bootstrap Bundle JS (includes Popper.js needed for collapse tooltips, etc.) -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<!-- Highcharts -->
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+<!-- Your custom chart script -->
+<script src="{% static 'MPLTEST/js/pie_charts.js' %}"></script>
+{% if Constants.enforce_consistency == True %}
+                <script src="{% static 'MPLTEST/js/consistency.js' %}"></script>
+
+
+        {% endif %}
+
+
+
+
+
+{% endblock %}

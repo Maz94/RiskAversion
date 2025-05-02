@@ -1,0 +1,24 @@
+{% extends "global/Page.html" %}
+
+{% block content %}
+        <h1 class="text-center">{% trans "Vos gains lors de la session précédente" %}</h1>
+
+<div class="card bg-light m-3">
+    <div class="card-body">
+
+<p>Lors de la première session, vous avez gagné <b>{{ endowment }}</b>. Ce montant sera remis en jeu lors de cette seconde session expérimentale. </p>
+
+
+<p>Avant de commencer, vous devrez remettre ce montant (<b>{{ endowment }}</b>) à l’expérimentateur, afin de pouvoir participer. Il est important de bien comprendre que <b>ce montant sera remis en jeu dans cette session : selon vos décisions, vous pourrez le conserver, l’augmenter, ou le perdre</b>.</p>
+
+
+
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <form method="post">
+        <button id="next-button" type="submit" class="btn btn-primary" >Suivant</button>
+    </form>
+</div>
+{% endblock %}

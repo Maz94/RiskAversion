@@ -1,0 +1,744 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+{% load i18n %}
+
+{% block styles %}
+    <link href="{% static 'MPLTEST/css/custom.css' %}" rel="stylesheet">
+{% endblock %}
+
+{# ****************************************************************************************************************** #}
+{# *** SCRIPTS *** #}
+{# ****************************************************************************************************************** #}
+{% block scripts %}
+
+        <script>
+
+            num_tasks = "{{Constants.num_tasks}}";
+
+
+
+
+        </script>
+        <script src="https://code.highcharts.com/highcharts.js"></script>
+        <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+
+        <script src="{% static 'MPLTEST/js/pie_charts.js' %}"></script>
+
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+          <!-- Externality Pop-up Notification -->
+        <div id="externality-popup" class="popup hidden"></div>
+
+<script>
+    const externalityValue = {% if treatment == 'green' %}+5{% else %}-5{% endif %};
+    const externalityText = "{% if treatment == 'green' %}+5 €{% else %}-5 €{% endif %}";
+    const externalityColor = "{% if treatment == 'green' %}green{% else %}brown{% endif %}";
+
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+    Highcharts.chart('pie_1', {
+        chart: {
+            type: 'pie',
+            height: 300,                     // ✅ Set a fixed height
+            backgroundColor: 'rgba(255, 255, 255, 0.002)',
+            spacing: [0, 0, 0, 0]            // ✅ Remove all extra spacing
+        },
+        credits: {
+            enabled: false                   // ✅ Remove "Highcharts.com"
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilité pour l\'Investissement A' %}",
+            style: {
+                fontSize: '14px'             // Optional: match title font size
+            }
+        },
+           tooltip: {
+    formatter: function () {
+        return `
+            <b>${this.point.name}</b><br>
+            Probabilité: ${this.point.percentage.toFixed(1)}%<br>
+        `;
+    }
+},
+        plotOptions: {
+            pie: {
+                center: ['50%', '50%'],
+                slicedOffset: 5,
+                dataLabels: {
+    enabled: true,
+    distance: 10, // reduce this to bring labels closer to pie
+    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+    style: {
+        fontSize: '10px',
+        fontWeight: 'bold'
+        // No padding here
+    }
+}
+            }
+        },
+        series: [{
+            name: "{% trans 'Probabilité' %}",
+            colorByPoint: true,
+            data: [
+                { name: "{% trans ' 0€' %} ", y: 60 },
+                { name: "{% trans ' 100€' %} ", y: 40 }
+            ]
+        }]
+    });
+      });
+
+document.addEventListener('DOMContentLoaded', function () {
+    Highcharts.chart('pie_12', {
+        chart: {
+            type: 'pie',
+            height: 300,                     // ✅ Same height here
+            backgroundColor: 'rgba(255, 255, 255, 0.002)',
+
+            spacing: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilité pour l\'Investissement B' %}",
+            style: {
+                fontSize: '14px'
+            }
+        },
+        tooltip: {
+    formatter: function () {
+        return `
+            <b>${this.point.name}</b><br>
+            Probabilité: ${this.point.percentage.toFixed(1)}%<br>
+        `;
+    }
+},
+        plotOptions: {
+            pie: {
+
+                center: ['50%', '50%'],
+
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        margin : '100px',
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: "{% trans 'Probabilité' %}",
+            colorByPoint: true,
+           data: [
+                { name: "{% trans ' X €' %} ", y: 100 }
+            ]
+        }]
+    });
+});
+document.addEventListener('DOMContentLoaded', function () {
+    Highcharts.chart('pie_2', {
+        chart: {
+            type: 'pie',
+            height: 300,
+            backgroundColor: 'rgba(255, 255, 255, 0.002)',
+            spacing: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilité pour l\'Investissement A' %}",
+            style: {
+                fontSize: '14px'
+            }
+        },
+        tooltip: {
+    formatter: function () {
+        return `
+            <b>${this.point.name}</b><br>
+            Probabilité: ${this.point.percentage.toFixed(1)}%<br>
+            Externalité: <b style="color:${externalityColor}">${externalityText}</b>
+        `;
+    }
+}
+,
+        plotOptions: {
+            pie: {
+                center: ['50%', '50%'],
+                slicedOffset: 5,
+                dataLabels: {
+                    enabled: true,
+                    distance: 10,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        fontSize: '10px',
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: "{% trans 'Probabilité' %}",
+            colorByPoint: true,
+            data: [
+                { name: "{% trans ' 0€' %} ", y: 30, externality: 5 },
+                { name: "{% trans ' 100€' %} ", y: 70, externality: 5 }
+            ]
+        }]
+    });
+});
+document.addEventListener('DOMContentLoaded', function () {
+    Highcharts.chart('pie_22', {
+        chart: {
+            type: 'pie',
+            height: 300,
+            backgroundColor: 'rgba(255, 255, 255, 0.002)',
+
+            spacing: [0, 0, 0, 0]
+        },
+        credits: {
+            enabled: false
+        },
+        title: {
+            text: "{% trans 'Distribution de probabilité pour l\'Investissement B' %}",
+            style: {
+                fontSize: '14px'
+            }
+        },
+        tooltip: {
+    formatter: function () {
+        return `
+            <b>${this.point.name}</b><br>
+            Probabilité: ${this.point.percentage.toFixed(1)}%<br>
+            Externalité: <b style="color:${externalityColor}">${externalityText}</b>
+        `;
+    }
+}
+,
+        plotOptions: {
+            pie: {
+                center: ['50%', '50%'],
+                dataLabels: {
+                    enabled: true,
+                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                    style: {
+                        fontSize: '12px',
+                        fontWeight: 'bold'
+                    }
+                }
+            }
+        },
+        series: [{
+            name: "{% trans 'Probabilité' %}",
+            colorByPoint: true,
+            data: [
+                { name: "{% trans ' X €' %} ", y: 100, externality: 5 }
+            ]
+        }]
+    });
+});
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">{% trans "Instructions" %}</h1>
+    <!-- Countdown Timer -->
+   <div id="circle-timer-container" style="position: fixed; top: 20px; right: 100px; width: 80px; height: 80px; display: flex;">
+    <svg width="80" height="80">
+        <circle cx="40" cy="40" r="35" stroke="red" stroke-width="5" fill="none"></circle>
+        <circle id="progress-circle" cx="40" cy="40" r="35" stroke="#ff9999" stroke-width="5" fill="none"
+           stroke-dasharray="314.16" stroke-dashoffset="314.16"></circle>
+    </svg>
+    <div id="circle-timer-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 12px;">
+        {{ min_time_seconds }}
+    </div>
+</div>
+<!-- Centered text under the circle -->
+<div id="timer-message" style="position: fixed; top: 120px; right: 80px; width: 100px; height: 80px; display: flex;"
+     style="font-size: 14px;  color: gray; margin-top: 0px;">
+        <!-- Initially empty -->
+     </div>
+
+<div class="card bg-light m-3">
+
+    <div class="card-body">
+
+    <h4>{% trans "Objectif de l'expérience" %} </h4>
+    <p>
+        {% trans "Dans cette expérience, vous serez amené à prendre une série de décisions d'investissement. Chaque décision consiste à choisir entre deux investissements : un investissement risqué (Investissement A) et un investissement sûr (Investissement B)." %}
+    </p>
+
+    <p>
+{% trans "Vos choix auront un impact direct sur votre paiement final, qui pourra augmenter ou diminuer en fonction de vos décisions. Par ailleurs, certaines de vos actions auront des conséquences environnementales, influençant le montant versé à un fonds de donation destiné à une ONG engagée dans la lutte contre le changement climatique." %}
+    </p>
+
+    <h4>{% trans "Options d'Investissement" %}</h4>
+
+    <ul>
+        <li><b>{% trans "Investissement A (Investissement Risqué) :" %}</b> {% trans "Un investissement avec deux résultats possibles. Vous pouvez gagner de l'argent, en perdre ou ne rien recevoir, en fonction d'une probabilité prédéfinie." %}</li>
+        <li><b>{% trans "Investissement B (Investissement Sûr) :" %}</b> {% trans "Un gain ou une perte fixe et garanti sans aucun risque." %}</li>
+    </ul>
+
+    <hr>
+
+    <h4>{% trans "Comment fonctionne la probabilité :" %}</h4>
+    <p>
+        {% trans "La probabilité vous indique la probabilité qu'un événement se produise. Elle est exprimée en pourcentage (%)." %}
+    </p>
+    <p>
+        <b>{% trans "Investissement A (Investissement Risqué) :" %}</b> <br>
+       <li> {% trans "40 € avec 60 % de chances – Cela signifie que 6 fois sur 10, vous pourriez gagner 40 €." %}</li>
+     <li>   {% trans "0 € avec 40 % de chances – Cela signifie que 4 fois sur 10, vous pourriez ne rien gagner." %}</li>
+    </p>
+    <p>
+        <b>{% trans "Investissement B (Investissement Sûr) :" %}</b> <br>
+       <li> {% trans "10 € garantis – Peu importe le résultat, vous recevez 10 €." %}</li>
+    </p>
+
+    <hr>
+
+    <h4>{% trans "Visualisation de la probabilité :" %}</h4>
+    <p>
+        {% trans "Pour vous aider à visualiser, un graphique en secteurs (diagramme circulaire) sera affiché :" %}
+    </p>
+    <ul>
+        <li>{% trans "La plus grande portion du cercle représente l'issue la plus probable." %}</li>
+        <li>{% trans "La plus petite portion représente l'issue moins probable." %}</li>
+    </ul>
+    <p>
+
+    <hr>
+
+
+    <h4>{% trans "Exemple de décision d'investissement" %}</h4>
+<p>
+        {% trans "Pour chaque situation (chaque ligne du tableau ci-dessous), veuillez choisir l’Investissement risqué ou l’Investissement sûr en cochant la case correspondant : " %}
+     </p> <br>
+<div style="display: flex;  align-items: flex-start;">
+
+    <div id="pie_1" class="pie-chart" style="width: 450px; height: 300px;"></div>
+<div id="pie_12" class="pie-chart" style="width: 450px; height: 300px;"></div>
+
+</div>
+
+
+
+
+
+    <div class="card">
+
+
+
+        <table class="table table-striped table-centered">
+            <thead>
+                <tr class="header">
+                    <th class="small-cell">{% trans "Investissement A " %}</th>
+                    <th class="lottery_a_tick">{% trans "Risqué" %}</th>
+                    <th class="lottery_a_tick">{% trans "Sûr" %}</th>
+                    <th class="small-cell">{% trans "Investissement B " %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <!-- Option A Lottery -->
+                    <td class="lottery_a">
+                     <li>   <b>100 €</b> {% trans "avec une probabilité de " %}<b>40%</b>,
+                       ou <b>0 €</b> avec une probabilité de <b>60%</b>.</li>
+
+                    </td>
+
+                    <!-- Risky Radio for Option A -->
+                    <td class="lottery_a_tick">
+                        <label class="radio-container">
+                            <input type="radio" name="example_choice_1" value="Risky_A">
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
+
+                    <!-- Safe Radio for Option B -->
+                    <td class="lottery_b_tick">
+                        <label class="radio-container">
+                            <input type="radio" name="example_choice_1" value="Safe_B">
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
+
+                    <!-- Option B (Guaranteed) -->
+                    <td class="lottery_b">
+                      <li>  <b>40 €</b> {% trans "garantis." %}</li>
+
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="lottery_a">
+                     <li>   <b>100 €</b> {% trans "avec une probabilité de " %}<b>40%</b>,
+                        ou <b>0 €</b> avec une probabilité de <b>60%</b>.</li>
+
+                    </td>
+                    <td class="lottery_a_tick">
+                        <label class="radio-container">
+                            <input type="radio" name="example_choice_2" value="Risky_A">
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
+                    <td class="lottery_b_tick">
+                        <label class="radio-container">
+                            <input type="radio" name="example_choice_2" value="Safe_B">
+                            <span class="checkmark"></span>
+                        </label>
+                    </td>
+                    <td class="lottery_b">
+                      <li>  <b>50 €</b> {% trans "garantis." %}</li>
+
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+         <hr>
+ <h4>{% trans "Points Clés à Retenir :" %}</h4>
+
+<ul>
+    <li>{% trans "Une probabilité plus élevée signifie qu'un événement est plus susceptible de se produire." %}</li>
+    <li>{% trans "Une probabilité plus faible signifie qu'un événement est moins susceptible de se produire." %}</li>
+    <li>{% trans "L'Investissement A implique un risque, tandis que l'Investissement B offre une certitude." %}</li>
+</ul>
+
+<hr>
+
+
+<div class="alert alert-warning ">
+
+     <h4 style="text-align: center;">{% trans "Externalité Environnementale" %}<span>
+        <i class="fas fa-exclamation-triangle flash-icon" id="triangle-icon" style="color: red;"></i>
+    </span> </h4>
+    <p>
+         {% if treatment == 'green' %}
+        {% trans "Certains choix d'investissement auront un <b>impact environnemental positif</b>." %}
+        {% else %}
+       {% trans "Certains choix d'investissement auront un <b>impact environnemental négatif</b>." %}
+       {% endif %}
+    </p>
+      {% if treatment == 'brown' %}
+    <p>
+         <li> <b> {% trans "Externalités Négatives"%} :</b> {% trans "Certains investissements auront un coût environnemental, mesuré en termes d'empreinte carbone." %}
+    </li>
+
+     {% else %}
+      <li>  <b> {% trans "Externalités Positives" %} :</b> {% trans "Certains investissements contribueront à des projets réduisant les émissions de CO₂ et améliorant l'environnement." %}
+    </li></p>
+
+      {% endif %}
+    <p>
+              {% if treatment == 'brown' %}
+
+       <li>  <b>{% trans "Conséquence" %} :</b> {% trans "Pour chaque investissement avec une externalité négative, une somme sera déduite d'un fonds de donation initialement destiné à une ONG environnementale." %}
+   </li>
+         {% else %}
+
+           <li>  <b>{% trans "Conséquence" %} :</b> {% trans "Pour chaque investissement avec une externalité positive, une somme sera versée à un fonds de donation destiné à une ONG environnementale. " %}
+
+               </li>
+        {% endif %}
+
+    </p>
+    <p>
+       <li>  <b>{% trans "Effet sur vos gains" %} :</b> {% trans "Ces déductions ou augmentations n'affecteront pas directement vos gains personnels, mais elles influenceront l'impact de la donation collective." %}
+   </li> </p>
+</div>
+
+            <hr>
+<h4>{% trans "Exemple de décision d'investissement générant une externalité environnementale" %}</h4>
+
+<p>
+        {% trans "Pour chaque situation (chaque ligne du tableau ci-dessous), veuillez choisir l’Investissement risqué ou l’Investissement sûr en cochant la case correspondant : " %}
+     </p> <br>
+    <div class="wrapper">
+
+
+ <div style="display: flex; align-items: flex-start">
+    <!-- Chart 1 with externality badge -->
+    <div style="position: relative; width: 450px; height: 300px;">
+
+        <div id="pie_2" class="pie-chart" style="width: 100%; height: 100%;"></div>
+        <div class="flash-icon" style="
+            position: absolute;
+            top: 48%;
+            right: 43%;
+             padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
+            {% if treatment == 'green' %}
+                background-color: lightgreen;
+                color: green;
+            {% else %}
+                background-color: #f3d1c3;
+                color: brown;
+            {% endif %}
+        ">
+            {% if treatment == 'green' %}
+                +5 €
+            {% else %}
+                -5 €
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Chart 2 with externality badge -->
+    <div style="position: relative; width: 450px; height: 300px;">
+        <div id="pie_22" class="pie-chart" style="width: 100%; height: 100%;"></div>
+        <div class="flash-icon" style="
+            position: absolute;
+           top: 48%;
+            right: 43%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 15px;
+            box-shadow: 0px 0px 6px rgba(0,0,0,0.15);
+            {% if treatment == 'green' %}
+                background-color: lightgreen;
+                color: green;
+            {% else %}
+                background-color: #f3d1c3;
+                color: brown;
+            {% endif %}
+        ">
+            {% if treatment == 'green' %}
+                +5 €
+            {% else %}
+                -5 €
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+</div>
+
+<div class="wrapper">
+    <div class="card">
+        <table class="table table-striped table-centered">
+            <thead>
+                <tr class="header">
+                    <th class="small-cell">{% trans "Investissement A " %}</th>
+                    <th class="lottery_a_tick">{% trans "Risqué" %}</th>
+
+                    <th class="lottery_a_tick">{% trans "Sûr" %}</th>
+                    <th class="small-cell">{% trans "Investissement B " %}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <!-- Option A Lottery -->
+                    <td class="lottery_a">
+
+
+                        <li> <b>100 €</b> {% trans "avec une probabilité de" %} <b>70%</b>,
+                       ou <b>0 €</b> avec une probabilité de <b>30%</b></li>
+                        <li> <span>Une externalité de
+                            <span style="color: {% if treatment == 'green' %}green{% else %}brown{% endif %}; font-weight: bold;">
+                                {% if treatment == 'green' %}+5 €{% else %}-5 €{% endif %}
+                            </span>
+                            sera générée dans les deux cas.
+                        </span></li>
+                    </td>
+
+                    <!-- Risky Radio for Option A -->
+                    <td class="lottery_a_tick">
+                        <label class="radio-container">
+                            <input type="radio" name="choice1" value="Risky"
+                                   onclick="showExternality(this, 'risky', this.nextElementSibling.getAttribute('value'))">
+                            <span class="externality-display" value="{% if treatment == 'green' %}5{% else %}-5{% endif %}">
+                            </span>
+                            <div class="popup hidden"></div>
+                        </label>
+                    </td>
+
+                    <!-- Safe Radio for Option B -->
+                    <td class="lottery_b_tick">
+                        <label class="radio-container">
+                            <input type="radio" name="choice1" value="Safe"
+                                   onclick="showExternality(this, 'safe', this.nextElementSibling.getAttribute('value'))">
+                            <span class="externality-display" value="{% if treatment == 'green' %}5{% else %}-5{% endif %}">
+                            </span>
+                            <div class="popup hidden"></div>
+                        </label>
+                    </td>
+
+                    <!-- Option B (Guaranteed) -->
+                    <td class="lottery_b">
+                    <li>    <b>40 €</b> {% trans "garantis" %}</li>
+                      <li>  <span>Une externalité de
+                            <span style="color: {% if treatment == 'green' %}green{% else %}brown{% endif %}; font-weight: bold;">
+                                {% if treatment == 'green' %}+5 €{% else %}-5 €{% endif %}
+                            </span>
+                            sera générée.
+                        </span></li>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="lottery_a">
+                     <li>   <b>100 €</b> {% trans "avec une probabilité de" %} <b>70%</b> ou
+                        <b>0 €</b>  avec une probabilité de <b>30%</b></li>
+                       <li> <span> Une externalité de
+                            <span style="color: {% if treatment == 'green' %}green{% else %}brown{% endif %}; font-weight: bold;">
+                                {% if treatment == 'green' %}+5 €{% else %}-5 €{% endif %}
+                            </span>
+                            sera générée dans les deux cas.
+                        </span></li>
+                    </td>
+                    <td class="lottery_a_tick">
+                        <label class="radio-container">
+                            <input type="radio" name="choice2" value="Risky"
+                                   onclick="showExternality(this, 'risky', this.nextElementSibling.getAttribute('value'))">
+                            <span class="externality-display" value="{% if treatment == 'green' %}5{% else %}-5{% endif %}">
+                            </span>
+                            <div class="popup hidden"></div>
+                        </label>
+                    </td>
+
+                    <td class="lottery_b_tick">
+                        <label class="radio-container">
+                            <input type="radio" name="choice2" value="Safe"
+                                   onclick="showExternality(this, 'safe', this.nextElementSibling.getAttribute('value'))">
+                            <span class="externality-display" value="{% if treatment == 'green' %}5{% else %}-5{% endif %}">
+                            </span>
+                            <div class="popup hidden"></div>
+                        </label>
+                    </td>
+
+                    <td class="lottery_b">
+                      <li>  <b>50 €</b> {% trans "garantis" %}</li>
+                      <li>  <span>Une externalité de
+                            <span style="color: {% if treatment == 'green' %}green{% else %}brown{% endif %}; font-weight: bold;">
+                                {% if treatment == 'green' %}+5 €{% else %}-5 €{% endif %}
+                            </span>
+                            sera générée.
+                        </span></li>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+  <hr>
+
+<h4>{% trans "South Pole Project et Compensation Carbone" %}</h4>
+        <img src="{% static 'MPLTEST/images/image5.jpeg' %}" alt="My Image"
+     style="float: right; margin-left: 20px; margin-right: 40px;border: 3px solid black; padding: 1px; width: 250px; margin-bottom: 30px;">
+
+<p>
+    {% trans "L'ONG sélectionnée pour recevoir les donations est le South Pole Project, une organisation spécialisée dans la compensation carbone et le financement de projets environnementaux à travers le monde. Ils développent des initiatives qui réduisent les émissions de gaz à effet de serre en soutenant la transition vers des solutions durables." %}
+
+</p>
+        <p>
+    {% trans "Parmi les initiatives soutenues par South Pole, on trouve :" %}
+</p>
+<ul>
+    <li>{% trans "<b>Reforestation et préservation</b> des forêts tropicales, permettant d’absorber du CO₂ et de protéger la biodiversité ." %}</li>
+</ul>
+
+
+
+<img src="{% static 'MPLTEST/images/image3.png' %}" alt="My Image"
+     style="float: right; margin-left: 20px;margin-right: 40px; border: 3px solid black; padding: 5px; width: 250px; margin-bottom: 30px;">
+
+<p>
+    {% trans "La compensation carbone fonctionne en finançant des initiatives qui captent ou réduisent les émissions de gaz à effet de serre, équilibrant ainsi l'empreinte environnementale de certaines activités humaines." %}
+</p>
+
+<p>
+    {% trans "Une donation de 5 € au South Pole Project permet de compenser environ 5 kg de CO₂, soit l'équivalent des émissions générées par un trajet en voiture de <b>40 à 50 km</b> avec une voiture essence moyenne. Par exemple, cela correspond à un trajet entre Montpellier et Sète." %}
+</p>
+
+<hr>
+
+<h4>{% trans "Processus de Décision" %}</h4>
+<p>
+    {% trans "À chaque tour, vous devrez choisir entre Investissement A (Investissement Risqué) et Investissement B (Investissement Sûr)." %}
+</p>
+<ul>
+<li>{% trans "Vos choix auront un impact à la fois sur votre résultat final (gain ou perte) et sur l’environnement." %}</li>
+    {% if treatment == 'brown' %}
+        <li>{% trans "Certains Investissements auront des conséquences négatives sur le fonds de donation destiné à l'ONG." %}</li>
+
+     {% else %}
+        <li>{% trans "Certains Investissements auront des conséquences positives sur le fonds de donation destiné à l'ONG." %}</li>
+
+      {% endif %}
+    <li><b>{% trans "Attention : En fonction de vos décisions, vous pouvez également perdre de l'argent." %}</b></li>
+</ul>
+
+<hr>
+
+<h4>{% trans "Paiement Final" %}</h4>
+<p>
+    {% blocktrans %}À la fin de l'expérience, <b>{{ num_payoff }} de vos décisions seront sélectionnées aléatoirement et mises en œuvre pour le paiement effectif.</b> {% endblocktrans %}
+</p>
+<ul>
+
+<p>
+   <li> {% trans "Lorsque l’investissement choisi est l’investissement sûr (Investissement B), le résultat indiqué est automatiquement appliqué, sans tirage au sort. En revanche, si c’est l’investissement risqué (Investissement A) qui est sélectionné, le résultat est déterminé aléatoirement en fonction des probabilités indiquées. " %}</li>
+</p>
+<p>
+<li> {% trans "Votre paiement final correspondra à la somme des cinq résultats obtenus (incluant les gains et pertes des décisions tirées au sort) ajoutée au montant total de vos gains lors de la première session." %} </li>
+</p>
+        <p>
+  <li> {% trans "L'impact environnemental final sera calculé en fonction des externalités générées par vos choix, et la donation finale sera ajustée en fonction de ces externalités cumulées." %}</li>
+</p>
+
+</ul>
+
+
+  <hr>
+
+
+
+<div class="alert alert-warning">
+    <h4 style="text-align: center;">{% trans "Points Clés à Retenir" %}</h4>
+
+<ul>
+
+<p>
+   <li> {% trans "<b> Vos gains ne sont pas fixes </b>: ils dépendent des résultats de vos choix." %}</li>
+</p>
+<p>
+  <li>  {% trans "Vos gains lors de la première session <b>peuvent varier en fonction des gains et pertes accumulés lors de cette seconde session</b>." %}</li>
+</p>
+        <p>
+<li>{% trans "<b>Certains choix auront un impact environnemental</b>, influençant la donation versée à l’ONG." %}</li>
+</p>
+        <p>
+  <li>  {% trans "<b>La donation au South Pole Project dépendra</b> des externalités cumulées à la fin de cette session." %}</li>
+</p>
+            <p>
+  <li>  {% trans "<b>Cette donation est réalisée par l'expérimentateur </b>en fonction des externalités générées par vos décisions et <b>n'influence pas vos gains et pertes.</b> " %}</li>
+</p>
+</ul>
+</div>
+
+            <hr>
+
+
+<div class="text-center mt-4">
+    <form method="post">
+        <button id="next-button" type="submit" class="btn btn-primary">Suivant</button>
+    </form>
+</div>
+
+{% endblock %}

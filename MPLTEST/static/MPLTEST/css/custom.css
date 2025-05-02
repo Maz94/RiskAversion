@@ -1,0 +1,534 @@
+/* ****************************************************************************************************************** */
+/* *** General *** */
+/* ****************************************************************************************************************** */
+
+h2 {
+    text-align: center !important;
+}
+
+.page-header {
+    margin: 20px 0 20px;
+    padding: 0;
+    border-bottom: none;
+}
+
+.otree-btn-next {
+    margin: 40px auto;
+    display: inherit;
+}
+
+.wrapper, .alert {
+    min-width: 850px;
+    max-width: 1200px;
+    margin: 0 auto 20px;
+     max-width: 90%;  /* Ensures the alert fits inside the card */
+}
+
+.alert-success {
+    background-color: #d4edda;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+}
+
+.alert-secondary {
+    background-color: #f1f1f1;
+}
+
+/* ****************************************************************************************************************** */
+/* *** Instructions *** */
+/* ****************************************************************************************************************** */
+
+.instructions {
+	width: 100%;
+	height: 100%;
+	background: rgba(255,255,245,0.25);
+	margin: 40px auto;
+    padding: 20px 20px 10px 20px;
+
+    position:relative;
+    -webkit-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.05) inset;
+       -moz-box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.05) inset;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.05) inset;
+
+    -moz-border-radius: 5px;
+         border-radius: 5px;
+}
+
+
+/* ****************************************************************************************************************** */
+/* *** Decision/Results Table *** */
+/* ****************************************************************************************************************** */
+
+.table {
+    width: 100%;  /* Table takes full width of the wrapper */
+    max-width: 1200px;  /* Optional: Set a maximum width */
+    margin: 0 auto;  /* Center the table horizontally */
+    margin-bottom: 0 auto;
+}
+.table-success {
+    background-color: #d4edda;  /* Light green for selected payoffs */
+}
+
+.table-warning {
+    background-color: #fff3cd;  /* Light yellow for emphasis */
+}
+
+.bg-green {
+    background-color: #a5c1ac;  /* Light green */
+}
+
+.bg-brown {
+    background-color: #e6d5c5;  /* Light brown */
+}
+
+.bg-light {
+    background-color: #c0c3c6;  /* Light grey (Bootstrap default) */
+}
+
+
+.table>thead>tr>th,
+.table>tbody>tr>td {
+    padding: 10px;
+     margin: 0 !important;        /* Remove default margin */
+    vertical-align: middle;
+    border: none;
+     padding: 10px 2px;
+     min-width: 40px;
+
+}
+@media (max-width: 800px) {
+    .card {
+        width: 100%;  /* Full width on smaller screens */
+        max-width: 100%;
+    }
+
+    .card-body {
+        padding: 15px;  /* Reduce padding for smaller screens */
+    }
+
+}
+button.btn-primary {
+    width: 100%;
+    text-align: center;
+
+
+}
+
+
+
+
+
+.header {
+    background-color: #80a2c1;
+    border: 1px solid #dee2e6;
+     text-align: center;
+}
+.pie {
+    min-width: 25px;
+    min-height: 25px;
+    width: 50px;
+    height: 50px;
+    max-width: 50px; /* Optional: Set a maximum width */
+    max-height: 50px; /* Optional: Set a maximum height */
+    margin: 10px ;
+
+    justify-content: center;
+    align-items: center;
+}
+
+/* Center the pie chart's container as well */
+.center-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    max-width: 350px;  /* Limit width */
+    max-height: 350px; /* Limit height */
+    margin: 0 auto;    /* Center horizontally */
+
+    padding: 0;        /* Remove any internal padding */
+
+}
+
+.centered-heading {
+    text-align: center;
+}
+.highcharts-container {
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 ;
+    display: flex;
+}
+
+
+.formfield {
+    min-width: 80px;
+    text-align: center;
+}
+
+.lottery_a {
+    min-width: 70px;
+     max-width: 150px;
+    text-align: left;
+}
+
+.lottery_b {
+    min-width: 30px;
+         max-width: 70px;
+
+    text-align: left;
+}
+.lottery_a_tick {
+    min-width: 20px;
+     max-width: 40px;
+    text-align: center;
+}
+
+.lottery_b_tick {
+    min-width: 20px;
+         max-width: 40px;
+
+    text-align: center;
+}
+
+.center {
+    text-align: center;
+}
+
+.info {
+    padding: 15px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+.btn-primary {
+    margin-bottom: 10px;
+}
+
+.btn-success[disabled], .btn-primary[disabled] {
+    opacity: 1;
+}
+
+input[type="radio"]{
+    margin: 7px;
+}
+
+.panel {
+    border: 0.5pt solid #e1dede;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    margin: 25px 0;
+}
+body {
+    background-color: #dad8d8;
+}
+.popup {
+    position: absolute;
+    top: 50%;
+    left: 120%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.85);
+    color: white;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 6px;
+    z-index: 1500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.popup span {
+    display: inline-block;  /* Ensures consistent size for inline elements */
+    width: 70px;  /* Fixed width for all pop-ups */
+    text-align: center;
+}
+
+/* Display the pop-up */
+.popup.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Evaporate smoothly and stay hidden */
+.popup.evaporated {
+    display: none;  /* Prevent it from reappearing */
+}
+
+/* Pulse and Slide-Up Evaporate */
+.popup.show {
+    animation: pulse 0.5s ease-in-out, slideUpEvaporate 1.5s forwards;
+}
+
+/* Pulse Effect */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Slide-Up and Evaporate Effect */
+@keyframes slideUpEvaporate {
+    0% {
+        opacity: 1;
+        transform: translateY(-20px) scale(1);
+    }
+    50% {
+        transform: translateY(-80px) scale(1.85);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-500px) scale(0.9);
+    }
+}
+
+/* Positive and Negative Color Adjustment */
+.popup.positive {
+    background-color: green;
+}
+
+.popup.negative {
+    background-color: brown;
+}
+
+i:hover {
+    color: darkred;
+    cursor: pointer;
+}
+.flash-icon {
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.6);
+        opacity: 0.7;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+.info-icon {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    margin-left: 0px;
+    color: #007bff;  /* Blue icon */
+    font-size: 20px;
+}
+
+.info-icon:hover::after {
+    content: attr(title);
+    position: absolute;
+   left: -250px;
+    top: 10px;
+    transform: translateX(-45%) translateY(+100%);
+
+    background-color: rgb(106, 167, 223);
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    font-size: 14px;
+    z-index: 1000;
+    box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2);
+}
+.radio-container {
+    display: inline-flex;
+    align-items: center;
+    position: relative;
+    cursor: pointer;
+    margin: 0px 0px;
+    padding: 4px 10px;
+    background-color: #c8d9e6;
+     border-radius: 12px;
+
+
+}
+
+.radio-container input[type="radio"]:checked::before {
+        content: '\20';  /* Bullet character */
+        font-size: 1rem;   /* Larger for visibility */
+        color: #007bff;    /* Bootstrap primary blue */
+        position: absolute;
+        transform: translate(-50%, -50%);
+    }
+
+.radio-container input[type="radio"] {
+        appearance: none;
+        border: 2px solid #007bff;  /* Blue border for unselected */
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        margin-right: 10px;
+        position: relative;
+    }
+.radio-container input[type="radio"]:disabled {
+        background-color: white;
+    }
+
+.radio-container input[type="radio"]:checked {
+        background-color: #007bff;
+        border: 1px solid #007bff;
+    }
+.info-icon {
+    margin-left: 8px;
+    color: #007bff;
+    font-size: 16px;
+}
+
+
+
+.justified-text {
+    text-align: justify;
+}
+
+
+
+
+/* ****************************************************************************************************************** */
+/* *** Progress Bar *** */
+/* ****************************************************************************************************************** */
+
+.progress {
+    height: 30px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+}
+.progress-bar1:hover, .progress-bar2:hover, .progress-bar3:hover {
+    opacity: 0.9;
+}
+
+.progress-bar1, .progress-bar2, .progress-bar3 {
+    display: flex;
+    align-items: center;  /* Vertical centering */
+    justify-content: right; /* Horizontal centering */
+    background-repeat: repeat-x;
+    transition: width 0.5s ease, background-color 0.5s ease;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    height: 100%; /* Ensure it fills the container */
+}
+.progress-bar1 {
+    background-image: linear-gradient(to bottom, rgb(184, 28, 28) 0%, rgba(255, 77, 77, 0.8) 100%);
+    background-repeat: repeat-x;
+    transition: width 0.5s ease, background-color 0.5s ease;
+    font-weight: bold;
+    color: white;
+
+}
+
+.progress-bar2 {
+    background-image: linear-gradient(to bottom, rgb(255, 136, 0) 0%, rgba(255, 178, 102, 0.8) 100%);
+    background-repeat: repeat-x;
+    transition: width 0.5s ease, background-color 0.5s ease;
+    font-weight: bold;
+    color: white;
+}
+
+.progress-bar3 {
+    background-image: linear-gradient(to bottom, rgb(40, 167, 69) 0%, rgba(72, 180, 97, 0.8) 100%);
+    background-repeat: repeat-x;
+    transition: width 0.5s ease, background-color 0.5s ease;
+    font-weight: bold;
+    color: white;
+}
+
+.label {
+    font-weight: normal;
+    margin-bottom: 4pt;
+}
+.slider-container {
+        position: relative;
+        width: 100%;
+        text-align: center;
+        margin-top: 20px;
+        padding-bottom: 10px;
+    }
+
+    .slider {
+        width: 100%;
+        -webkit-appearance: none;
+        appearance: none;
+        background: #ddd;
+        border-radius: 5px;
+        height: 10px;
+        outline: none;
+        transition: background 0.2s;
+    }
+
+    .slider:hover {
+        background: #ccc;
+    }
+
+    /* Small dents (ticks) on the scale */
+    .slider-scale {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.7rem;
+        color: #555;
+        margin-top: 10px;
+        width: 100%;
+        position: relative;
+    }
+
+    .slider-scale span {
+        position: relative;
+    }
+
+    /* Add small ticks below each scale number */
+    .slider-scale span::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 2px;
+        height: 8px;
+        background: black;
+    }
+
+    .slider-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1rem;
+        font-weight: bold;
+        color: #333;
+        margin-top: 10px;
+    }
+
+    /* Make the slider button bigger */
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        background: #007bff;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        background: #007bff;
+        border-radius: 50%;
+        cursor: pointer;
+    }
