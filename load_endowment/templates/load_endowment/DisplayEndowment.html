@@ -1,0 +1,13 @@
+{% extends "global/Page.html" %}
+
+{% block content %}
+<h1>Endowment</h1>
+{% if endowment > 0 %}
+<p>Your endowment is: {{ endowment }} euros.</p>
+{% else %}
+<p>We could not find your phone number. Please contact the administrator.</p>
+{% endif %}
+<form method="post">
+    <button type="submit">Next</button>
+</form>
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "global/Page.html" %}
+
+{% block content %}
+<h1>Enter Your Phone Number</h1>
+<p>Please enter the last 4 digits of your phone number:</p>
+<form method="post">
+    {{ formfields }}
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}
