@@ -1,0 +1,97 @@
+{% extends "global/Page.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+
+<!-- ✅ Consent Form (Hidden if withdrawn) -->
+<div class="card bg-light m-3" id="consent-container">
+   <div class="card-body">
+          <p> <h1 class="text-center">{% trans "Formulaire de Consentement" %}</h1></p>
+
+        <p><strong>Formulaire de consentement – Expérience en deux sessions</strong></p>
+
+        <p>Vous êtes invité(e) à participer à une étude scientifique portant sur la prise de décision économique.
+        Cette étude est composée de <strong>deux sessions distinctes</strong>.
+        La première session a lieu aujourd’hui, et la seconde session se déroulera à une date ultérieure qui vous sera communiquée.</p>
+
+        <p>Lors de cette première session, vous prendrez une série de décisions qui influenceront les gains monétaires que vous recevrez à la fin de la session. Ces gains ne sont pas fixes : ils dépendront de vos choix et des règles spécifiques de l’expérience. Toutes les instructions vous seront fournies avant le début de la session.</p>
+
+        <p>En acceptant de participer, <strong>vous vous engagez à être présent(e) à la deuxième session</strong>
+        et à rapporter la somme gagnée aujourd’hui, qui servira de mise pour la seconde session.</p>
+
+        <p><strong>Règles de présence :</strong></p>
+        <ul>
+            <li>Votre absence à la deuxième session sera considérée comme une absence enregistrée.</li>
+            <li>Selon les règles du <strong>LEEM</strong>, un total de <strong>trois absences</strong> entraînera votre <strong>suppression de la liste des participants</strong>.</li>
+            <li>Si vous pensez ne pas pouvoir respecter cet engagement, vous avez la possibilité de vous retirer maintenant.</li>
+        </ul>
+
+        <p>Il est donc crucial que vous respectiez votre engagement et reveniez avec l’intégralité de la somme attribuée lors de cette première phase. Si vous ne respectez pas cette condition, votre participation pourra être invalidée et vous pourriez ne pas être éligible à recevoir l’éventuelle rémunération finale.</p>
+
+        <p><strong>Confidentialité et anonymat :</strong> Toutes vos décisions et informations personnelles seront traitées de manière strictement confidentielle et anonymisée. Vos choix seront utilisés uniquement à des fins de recherche scientifique.</p>
+
+        <p><strong>Votre engagement :</strong></p>
+
+
+        <form method="post" id="consent-form">
+            <div class="form-group">
+                {{ formfield "consent_given" }}
+                {{ formfield_errors "consent_given" }}
+            </div>
+
+            <input type="hidden" name="withdrawn" id="withdrawn-input" value="0">
+
+            <p class="text-center mt-3">
+                <button type="submit" class="btn btn-primary" id="continue-btn">
+                    Accepter et continuer
+                </button>
+            </p>
+        </form>
+
+        <hr>
+
+        <p class="text-center text-danger">
+            Si vous ne souhaitez pas participer, vous pouvez vous retirer immédiatement.
+        </p>
+
+        <p class="text-center">
+            <button type="button" class="btn btn-danger" id="withdraw-btn">
+                Je me retire
+            </button>
+        </p>
+    </div>
+</div>
+
+<div class="card bg-light m-3" id="goodbye-container" style="display: none;">
+    <h1 class="text-center">{% trans "Fin de l'expérience" %}</h1>
+    <div class="card-body text-center">
+        <p>Vous avez choisi de vous retirer de l’expérience.</p>
+        <p>Merci pour votre temps.</p>
+    </div>
+</div>
+
+
+
+<script>
+// ✅ Handle withdrawal
+document.getElementById("withdraw-btn").addEventListener("click", function() {
+    if (confirm("Êtes-vous sûr(e) de vouloir quitter l'expérience ? Cette décision est définitive.")) {
+        sessionStorage.setItem("withdrawn", "true");  // ✅ Store withdrawal status in sessionStorage
+        location.reload();  // Reload page so next participant sees goodbye message
+    }
+});
+
+// ✅ Check if any participant withdrew in this browser session
+if (sessionStorage.getItem("withdrawn") === "true") {
+    document.getElementById("consent-container").style.display = "none";  // Hide consent form
+    document.getElementById("goodbye-container").style.display = "block";  // Show goodbye message
+}
+</script>
+
+{% endblock %}
+
+
+
+
