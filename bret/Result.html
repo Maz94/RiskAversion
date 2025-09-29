@@ -1,0 +1,73 @@
+{{ block styles }}
+<link rel="stylesheet" href="{{ static 'bret/bret.css'}}" />
+{{ endblock }}
+
+{{ block title }}
+Bomb Risk Elicitation Task - Résultat
+{{ endblock }}
+
+{{ block content }}
+
+<div class="card bg-light mb-3">
+    <div class="card-body">
+    <p>
+        Vous avez ouvert {{ player.n_boxes }} boîte{{ if player.n_boxes > 1 }}s{{ endif }}.
+        La bombe était dans la boîte numéro {{ player.bomb_box }}.
+        {{ if not player.explode }}
+        Votre gain est de {{ player.n_boxes }} x {{ C.BOX_VAL|cu }} = {{ player.payoff }}.
+        {{ else }}
+        Votre gain est de {{ player.payoff }}.
+        {{ endif }}
+    </p>
+    </div>
+</div>
+
+<table id="table_boites" class="text-center mx-auto mb-3">
+</table>
+
+ <div class="text-center">
+            <button type="submit" class="btn btn-primary">Continuer</button>
+        </div>
+
+{{ endblock }}
+
+{{ block scripts }}
+<script src="{{static 'fill_auto.js' }}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const table_boites = document.querySelector("#table_boites");
+        let compteur = 0;
+        for (let i = 0; i < 10; i++) {
+            let ligne = document.createElement("tr");
+            table_boites.appendChild(ligne);
+            for (let j = 0; j < 10; j++) {
+                compteur++;
+                let cell = document.createElement("td");
+                cell.innerHTML = `${compteur}`;
+
+                // Ajouter une classe pour les boîtes collectées
+                if (compteur <= Number(js_vars.n_boxes)) {
+                    cell.classList.add("bg-info");
+                }
+
+                // Ajouter l'image de la bombe
+                if (compteur === Number(js_vars.bomb_box)) {
+                    cell.innerHTML = ''; // Supprimer le texte de la cellule
+                    cell.classList.add("bg-danger");
+                    let bombImage = document.createElement("img");
+                    bombImage.src = "{{ static 'bret/bomb.png' }}";
+                    bombImage.alt = "Bombe";
+                    bombImage.style.width = "100%"; // Ajuste la taille de l'image pour qu'elle s'adapte à la cellule
+                    bombImage.style.height = "100%"; // Ajuste la taille de l'image pour qu'elle s'adapte à la cellule
+                    cell.appendChild(bombImage);
+                }
+
+                ligne.appendChild(cell)
+            }
+        }
+
+        if (js_vars.fill_auto)
+            fill_auto();
+    });
+</script>
+{{ endblock }}

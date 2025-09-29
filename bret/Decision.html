@@ -1,0 +1,103 @@
+{{ block styles }}
+<link rel="stylesheet" href="{{ static 'bret/bret.css'}}"/>
+{{ endblock }}
+
+{{ block title }}
+Bomb Risk Elicitation Task - Decision
+{{ endblock }}
+
+{{ block content }}
+<div class="card bg-light mb-3">
+    <div class="card-body">
+        <p>
+            Dans ce jeu, 100 boîtes, numérotées de 1 à 100, vous sont présentées. <strong>Chacune de ces boites a
+            une valeur de {{ C.BOX_VAL|cu }}, sauf une qui contient une bombe.</strong> Vous ne connaissez pas le numéro
+            de la boîte qui contient la bombe, vous savez seulement qu'elle peut être dans n'importe quelle boîte. C'est
+            le programme informatique qui détermine de manière aléatoire la boîte dans laquelle se situe la bombe.
+            Chaque boîte a la même chance de contenir la bombe.
+        </p>
+        <p>
+            Vous devez décider du nombre de boites que vous souhaitez ouvrir, en commençant par la boite numéro 1 et
+            en continuant par numéros croissants, jusqu’à 100 maximum.
+        </p>
+        <ul>
+            <li class="fw-bold">Si vous ouvrez la boîte qui contient la bombe, votre gain est de {{ 0|cu }}.</li>
+            <li class="fw-bold">Si vous n'ouvrez pas la boîte qui contient la bombe, vous gagnez {{ C.BOX_VAL|cu }}
+                par boîte ouverte.
+            </li>
+        </ul>
+        <table id="table_boites" class="text-center mx-auto mb-3">
+        </table>
+    </div>
+</div>
+<div class="text-center mb-5">
+    <p>
+        <label for="range_boites" class="form-label">Déplacer le curseur pour sélectionner le nombre de boîtes que vous
+            souhaitez ouvrir</label>
+    </p>
+    0&nbsp;<input type="range" min="0" max="100" value="0" name="n_boxes" class="slider" id="range_boites"
+                  style="width:80%">&nbsp;100
+    <p>Vous souhaitez ouvrir
+        <output for="range_boites" id="range_boites_out" class="fw-bold">0</output>
+        boîte(s).
+    </p>
+    <p class="form-control-errors" style="visibility: hidden">
+        Vous n'avez pas déplacé le curseur ! Veuillez le déplacer, même si vous le remettez sur 0 ensuite.
+    </p>
+</div>
+
+ <div class="text-center">
+            <button type="submit" class="btn btn-primary">Continuer</button>
+        </div>
+
+{{ endblock }}
+
+{{ block scripts }}
+<script src="{{ static 'fill_auto.js' }}"></script>
+<script>
+    let curseur_has_move = false;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        const table_boites = document.querySelector("#table_boites");
+        let compteur = 0;
+        for (let i = 0; i < 10; i++) {
+            let ligne = document.createElement("tr");
+            table_boites.appendChild(ligne);
+            for (let j = 0; j < 10; j++) {
+                compteur++;
+                let cell = document.createElement("td");
+                cell.innerHTML = `${compteur}`;
+                ligne.appendChild(cell)
+            }
+        }
+        document.querySelector("#range_boites").addEventListener("input", (event) => {
+            curseur_has_move = true;
+            // Récupère la valeur saisie
+            const value = parseInt(event.target.value);
+            document.querySelector("#range_boites_out").value = value;
+
+            // Réinitialiser les classes bg-info pour toutes les cellules
+            table_boites.querySelectorAll("td").forEach(cell => {
+                cell.classList.remove("bg-info");
+            });
+
+            // Appliquer la classe bg-info aux cellules correspondant à la valeur saisie
+            table_boites.querySelectorAll("td").forEach((cell, index) => {
+                if (index < value) {
+                    cell.classList.add("bg-info");
+                }
+            });
+        });
+        document.querySelector(".otree-btn-next").addEventListener("click", (event) => {
+            event.preventDefault();
+            if (!curseur_has_move) {
+                document.querySelector(".form-control-errors").style.visibility = "visible";
+                return false;
+            }
+            document.querySelector("form").submit();
+        });
+        if (js_vars.fill_auto)
+            fill_auto();
+    });
+</script>
+{{ endblock }}

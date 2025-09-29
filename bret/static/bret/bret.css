@@ -1,0 +1,52 @@
+    #table_boites {
+        border-collapse: collapse;
+        margin: 20px auto;
+    }
+
+    #table_boites tr {
+        border: none;
+    }
+
+    #table_boites td {
+        width: 50px;
+        height: 50px;
+        border: 2px solid #6c757d; /* Bordure grise foncée */
+        border-radius: 8px;
+        background-color: #f8f9fa; /* Couleur de fond légèrement grise */
+        text-align: center;
+        vertical-align: middle;
+        font-weight: bold;
+    }
+
+    /* Ajustement des styles pour le slider */
+    .slider {
+        -webkit-appearance: none;
+        width: 80%;
+        height: 8px;
+        background: #ddd;
+        outline: none;
+        opacity: 0.8;
+        transition: opacity 0.2s;
+    }
+
+    .slider:hover {
+        opacity: 1;
+    }
+
+    .slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #007bff; /* Bleu pour le curseur */
+        cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+    }
