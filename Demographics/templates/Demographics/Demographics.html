@@ -1,0 +1,483 @@
+{% extends "global/Page.html" %}
+
+{% block title %}
+    <h1 class="text-center mt-4">Questionnaire</h1>
+{% endblock %}
+
+{% block styles %}
+    <link href="{% static 'MPLTEST/css/custom.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+<div class="card bg-light m-3">
+    <div class="card-body">
+
+
+  <b>
+ <p>
+        {% trans " Voici un court questionnaire auquel vous devez répondre. Vos réponses n’auront aucun impact sur l’expérience, mais il est important de répondre de manière sincère et authentique. " %}
+    </p>
+ <p>
+     {% trans "Toutes les réponses sont anonymes et traitées de manière confidentielle." %}
+    </p></b>
+
+        <hr>
+
+        <form method="post" style="max-width: 700px; margin: auto;">
+
+            <!-- Age Dropdown -->
+
+            <div class="mb-4"> {{ formfield "age" }}</div>
+
+            <!-- Gender, Education, Study Field -->
+            <div class="mb-4">{{ formfield 'gender' }}</div>
+            <div class="mb-4">{{ formfield 'education' }}</div>
+            <div class="mb-4">{{ formfield 'study_field' }}</div>
+
+            <hr>
+
+            <!-- Sliders with Hidden Fields -->
+       <!-- Risk Preferences -->
+<div class="mb-4">
+    <label for="risk_tolerance">Je préfère un gain modéré garanti plutôt qu’une opportunité de gagner plus avec un risque de perte.</label>
+    <div class="slider-container">
+        <input type="range" id="risk_tolerance" name="risk_tolerance" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+            <span>Non, jamais</span>
+            <span>Plutôt non</span>
+            <span>Neutre</span>
+            <span>Plutôt oui</span>
+            <span>Oui, toujours</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_risk_tolerance" style="color: green; font-weight: bold;"><strong></strong></p>
+</div>
+            <hr>
+
+<div class="mb-4">
+    <label for="patience">Je suis capable d’économiser pour atteindre un objectif financier à long terme. </label>
+    <div class="slider-container">
+        <input type="range" id="patience" name="patience" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+            <span>Jamais</span>
+            <span>Rarement</span>
+            <span>Neutre</span>
+            <span>Souvent</span>
+            <span>Toujours</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_patience" style="color: green; font-weight: bold;"><strong></strong></p>
+</div>
+            <hr>
+
+<div class="mb-4">
+    <label for="altruism">Je suis prêt(e) à aider un(e) inconnu(e) en difficulté sans attendre de contrepartie.</label>
+    <div class="slider-container">
+        <input type="range" id="altruism" name="altruism" min="1" max="5" step="1" value="3" class="slider">
+       <div class="slider-scale">
+            <span>Non, jamais</span>
+            <span>Plutôt non</span>
+            <span>Neutre</span>
+            <span>Plutôt oui</span>
+            <span>Oui, toujours</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_altruism" style="color: green; font-weight: bold;"><strong></strong></p></p>
+</div>
+            <hr>
+
+<!-- Environmental Preferences -->
+<div class="mb-4">
+    <label for="climate_concern">Le changement climatique est un problème sérieux.</label>
+    <div class="slider-container">
+        <input type="range" id="climate_concern" name="climate_concern" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+            <span>Pas du tout d’accord</span>
+            <span>Plutôt pas d’accord</span>
+            <span>Neutre</span>
+            <span>Plutôt d’accord</span>
+            <span>Tout à fait d’accord</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_climate_concern" style="color: green; font-weight: bold;"><strong></strong></p>
+</div>
+            <hr>
+
+<div class="mb-4">
+    <label for="human_impact">L’activité humaine contribue considérablement au changement climatique. </label>
+    <div class="slider-container">
+        <input type="range" id="human_impact" name="human_impact" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+             <span>Pas du tout d’accord</span>
+            <span>Plutôt pas d’accord</span>
+            <span>Neutre</span>
+            <span>Plutôt d’accord</span>
+            <span>Tout à fait d’accord</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_human_impact" style="color: green; font-weight: bold;"><strong></strong></p>
+</div>
+            <hr>
+
+<div class="mb-4">
+    <label for="environmental_concern">Je me sens concerné(e) par les enjeux environnementaux. </label>
+    <div class="slider-container">
+        <input type="range" id="environmental_concern" name="environmental_concern" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+            <span>Pas du tout</span>
+            <span>Peu</span>
+            <span>Neutre</span>
+            <span>Assez</span>
+            <span>Très
+            </span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_environmental_concern" style="color: green; font-weight: bold;"><strong></strong></p>
+</div>
+            <hr>
+
+<div class="mb-4">
+    <label for="responsibility_environment">Il est de ma responsabilité personnelle de protéger l’environnement. </label>
+    <div class="slider-container">
+        <input type="range" id="responsibility_environment" name="responsibility_environment" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+              <span>Pas du tout d’accord</span>
+            <span>Plutôt pas d’accord</span>
+            <span>Neutre</span>
+            <span>Plutôt d’accord</span>
+            <span>Tout à fait d’accord</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_responsibility_environment" style="color: green; font-weight: bold;"><strong></strong></p>
+</div>
+            <hr>
+
+<div class="mb-4">
+    <label for="eco_spending">Je suis prêt(e) à payer plus cher pour un produit respectueux de l’environnement.</label>
+    <div class="slider-container">
+        <input type="range" id="eco_spending" name="eco_spending" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+            <span>Non</span>
+            <span>Plutôt non</span>
+            <span>Neutre</span>
+            <span>Plutôt oui</span>
+            <span>Oui</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_eco_spending" style="color: green; font-weight: bold;"><strong></strong></p>
+</div>
+            <hr>
+
+<div class="mb-4">
+    <label for="investment_environment">Je prends en compte l’impact écologique d’un investissement.</label>
+    <div class="slider-container">
+        <input type="range" id="investment_environment" name="investment_environment" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+            <span>Pas du tout</span>
+            <span>Un peu</span>
+            <span>Neutre</span>
+            <span>Assez</span>
+            <span>Beaucoup</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_investment_environment" style="color: green; font-weight: bold;"><strong></strong></p>
+</div>
+            <hr>
+
+<div class="mb-4">
+    <label for="lower_return">Je suis prêt(e) à accepter un rendement financier plus faible pour un investissement plus durable.</label>
+    <div class="slider-container">
+        <input type="range" id="lower_return" name="lower_return" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+            <span>Pas du tout d’accord</span>
+            <span>Plutôt pas d’accord</span>
+            <span>Neutre</span>
+            <span>Plutôt d’accord</span>
+            <span>Tout à fait d’accord</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_lower_return" style="color: green; font-weight: bold;"></p>
+</div>
+                        <hr>
+
+<div class="mb-4">
+    <label for="investment_impact"> Les investissements responsables ont un réel impact positif sur l’environnement. </label>
+    <div class="slider-container">
+        <input type="range" id="investment_impact" name="investment_impact" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+             <span>Pas du tout d’accord</span>
+            <span>Plutôt pas d’accord</span>
+            <span>Neutre</span>
+            <span>Plutôt d’accord</span>
+            <span>Tout à fait d’accord</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_investment_impact" style="color: green; font-weight: bold;"><strong></strong></p>
+</div>
+            <hr>
+
+<div class="mb-4">
+    <label for="economic_vs_environment">Priorité à l’économie VS environnement.</label>
+    <div class="slider-container">
+        <input type="range" id="economic_vs_environment" name="economic_vs_environment" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+              <span>Pas du tout d’accord</span>
+            <span>Plutôt pas d’accord</span>
+            <span>Neutre</span>
+            <span>Plutôt d’accord</span>
+            <span>Tout à fait d’accord</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_economic_vs_environment" style="color: green; font-weight: bold;"><strong></strong></p>
+</div>
+            <hr>
+
+<div class="mb-4">
+    <label for="nature_resilience">La nature a la capacité de se régénérer malgré l’activité humaine </label>
+    <div class="slider-container">
+        <input type="range" id="nature_resilience" name="nature_resilience" min="1" max="5" step="1" value="3" class="slider">
+        <div class="slider-scale">
+             <span>Pas du tout d’accord</span>
+            <span>Plutôt pas d’accord</span>
+            <span>Neutre</span>
+            <span>Plutôt d’accord</span>
+            <span>Tout à fait d’accord</span>
+        </div>
+    </div>
+    <p class="selected-value" id="display_nature_resilience" style="color: green; font-weight: bold;"><strong></strong></p>
+</div>
+
+
+            <hr>
+
+           <!-- Investment Priority -->
+<div class="mb-4">
+    <label>Quel facteur est le plus important pour vous lors d’un investissement ?</label>
+    <select name="investment_priority" class="form-control">
+        <option value="" disabled selected>Faites un choix</option>
+        <option value="financial">Le rendement financier</option>
+        <option value="stability">La stabilité et le faible risque</option>
+        <option value="impact">L’impact social et environnemental</option>
+        <option value="reputation">La réputation de l’entreprise</option>
+        <option value="diversification">La diversification du portefeuille</option>
+    </select>
+</div>
+
+<hr>
+
+<!-- Climate Consequences -->
+<div class="mb-4">
+    <label>Quelles sont les conséquences les plus préoccupantes du changement climatique ?</label>
+    <select name="climate_consequences" class="form-control">
+        <option value="" disabled selected>Faites un choix</option>
+        <option value="catastrophes">Les catastrophes naturelles</option>
+        <option value="biodiversite">La perte de biodiversité</option>
+        <option value="social">L’impact économique et social</option>
+        <option value="ressources">L’accès aux ressources naturelles</option>
+        <option value="not_concerned">Je ne suis pas préoccupé(e)</option>
+    </select>
+</div>
+            <hr>
+
+            <!-- Submit Button -->
+
+  <div class="text-center mt-4">
+                <button id="next-button" type="submit" class="btn btn-primary" >Continuer</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript to Update Hidden Fields -->
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    let sliders = document.querySelectorAll(".slider");
+
+    sliders.forEach(slider => {
+        let display = document.getElementById("display_" + slider.id);
+
+        // Ensure we are selecting the correct span elements (the labels)
+        let labelContainer = slider.parentElement.querySelector(".slider-scale");
+        let labels = Array.from(labelContainer.children).map(span => span.innerText);
+
+        slider.addEventListener("input", function() {
+            let value = parseInt(this.value, 10) - 1; // Adjust index to match array (0-based)
+            if (value >= 0 && value < labels.length) {
+                display.innerText = labels[value];
+            }
+        });
+    });
+});
+
+function initializeTimer() {
+    console.log("Initializing timer script...");
+
+    function waitForElements() {
+        const timerElement = document.getElementById("circle-timer-text");
+        const progressCircle = document.getElementById("progress-circle");
+        const nextButton = document.getElementById("next-button");
+        const timerMessage = document.getElementById("timer-message");
+
+        if (!timerElement || !progressCircle || !nextButton || !timerMessage) {
+            console.log("Elements not found, retrying in 500ms...");
+            setTimeout(waitForElements, 500); // Retry every 500ms
+            return;
+        }
+
+        console.log("Timer elements found, starting countdown...");
+
+        // Convert text content to number safely
+        let countdown = parseInt(timerElement.textContent, 10);
+        if (isNaN(countdown) || countdown <= 0) {
+            console.error("Invalid countdown value:", timerElement.textContent);
+            return; // Prevents starting with invalid values
+        }
+
+        startCountdown(timerElement, progressCircle, nextButton, timerMessage, countdown);
+    }
+
+    waitForElements(); // Start checking for elements
+}
+
+function startCountdown(timerElement, progressCircle, nextButton, timerMessage, countdown) {
+    const totalTime = countdown;
+    const radius = 35; // Ensure this matches your actual SVG radius
+    const circumference = 2 * Math.PI * radius; // Properly calculate circumference
+
+    progressCircle.style.strokeDasharray = `${circumference}`;
+    progressCircle.style.strokeDashoffset = `${circumference}`;
+    progressCircle.style.stroke = "red";
+    nextButton.disabled = true;
+
+    function updateCountdown() {
+        if (countdown > 0) {
+            countdown -= 1;
+            timerElement.textContent = countdown;
+
+            const progressPercentage = (totalTime - countdown) / totalTime;
+            const strokeOffset = circumference * (1 - progressPercentage);
+            progressCircle.style.strokeDashoffset = `${strokeOffset}`;
+
+            // Change color gradually based on time left
+            if (progressPercentage < 0.25) {
+                progressCircle.style.stroke = "red";
+            } else if (progressPercentage < 0.50) {
+                progressCircle.style.stroke = "orange";
+            } else if (progressPercentage < 0.75) {
+                progressCircle.style.stroke = "yellow";
+            } else {
+                progressCircle.style.stroke = "green";
+            }
+        } else {
+            timerElement.textContent = "Terminé!";
+            progressCircle.style.strokeDashoffset = "0";
+            progressCircle.style.stroke = "green";
+            nextButton.disabled = false;
+
+            timerMessage.textContent = "Vous pouvez accéder à la page suivante !";
+            timerMessage.style.color = "green";
+
+            clearInterval(timerInterval);
+            console.log("Terminé !");
+        }
+    }
+
+    const timerInterval = setInterval(updateCountdown, 1000);
+}
+
+// ✅ Ensure this function is called when the page loads
+document.addEventListener("DOMContentLoaded", initializeTimer);
+
+</script>
+
+
+{% endblock %}
+
+{% block styles %}
+<style>
+  .slider-container {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+    padding-bottom: 10px;
+}
+
+/* Ensure the slider track reaches the full width */
+.slider {
+    width: 820px; /* Make sure it spans the entire container */
+    -webkit-appearance: none;
+    appearance: none;
+    background: #ddd;
+    border-radius: 5px;
+    height: 10px;
+    outline: none;
+    transition: background 0.2s;
+    margin: 0 auto;
+    display: block;
+}
+
+/* Correct tick alignment */
+
+.slider-scale {
+    display: flex;
+    justify-content: space-between;
+    gap: 120px; /* Increase this value for more space */
+    font-size: 0.8rem;
+    color: #555;
+    margin-top: 5px;
+    width: 100%;
+    position: relative;
+}
+
+/* Ensures each tick is perfectly centered under the knob */
+.slider-scale span {
+    position: relative;
+    flex: 1; /* Equal spacing */
+    text-align: center;
+}
+
+/* Small vertical tick marks */
+.slider-scale span::before {
+    content: "";
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 8px;
+    background: black;
+}
+
+/* Align the thumb precisely */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 0px; /* Adjust for perfect centering */
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+/* Making the selected value bold and green */
+.selected-value {
+    font-weight: bold;
+    color: green;
+    text-align: center;
+    margin-top: 5px;
+}
+
+</style>
+{% endblock %}
